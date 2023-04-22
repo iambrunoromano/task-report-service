@@ -1,8 +1,11 @@
 package com.service.taskreport.request;
 
+import lombok.Data;
+
 import java.sql.Timestamp;
 import java.util.List;
 
+@Data
 public class TaskExecutionReportRequest {
   private Integer id;
   private Integer taskId;
