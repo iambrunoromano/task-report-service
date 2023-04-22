@@ -1,9 +1,7 @@
 package com.service.taskreport.entity;
 
 import com.service.taskreport.enums.StatusEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +15,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TaskStepExecutionReport extends AbstractExecution {
   public static final String TABLE_NAME = "task_step_execution_report";
+
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private Integer id;
 
   @Column(name = "task_execution_id")
   private Integer taskExecutionId;
