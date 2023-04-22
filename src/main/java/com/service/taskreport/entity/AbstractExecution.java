@@ -1,6 +1,5 @@
 package com.service.taskreport.entity;
 
-import com.service.taskreport.enums.StatusEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,7 +11,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
-public abstract class AbstractEntity {
+public abstract class AbstractExecution {
   @Id @GeneratedValue private Integer id;
 
   @Column(name = "star_date_time")
