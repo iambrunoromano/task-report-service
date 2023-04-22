@@ -6,7 +6,7 @@ import com.service.taskreport.response.TaskExecutionReportResponse;
 import com.service.taskreport.response.TaskStepExecutionReportResponse;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EntityResponseMapper {
   TaskExecutionReportResponse taskExecutionReportToTaskExecutionReportResponse(
       TaskExecutionReport taskExecutionReport);
