@@ -1,8 +1,6 @@
 package com.service.taskreport.entity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Data
 public abstract class AbstractExecution {
-  @Id @GeneratedValue private Integer id;
 
   @Column(name = "star_date_time")
   private Timestamp startDateTime;
