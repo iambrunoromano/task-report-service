@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class TaskExecutionReportRequest {
-  private Integer id;
   private Integer taskId;
   private List<TaskStepExecutionReportRequest> taskStepExecutionReports;
   private Timestamp startDateTime;
