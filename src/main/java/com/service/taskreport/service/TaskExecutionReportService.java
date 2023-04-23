@@ -69,6 +69,9 @@ public class TaskExecutionReportService {
     boolean success = true;
     boolean running = false;
     boolean failure = false;
+    if (taskStepExecutionReportList.isEmpty()) {
+      success = false;
+    }
     for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
       if (!StatusEnum.SUCCESS.equals(taskStepExecutionReport.getStatus())) {
         success = false;
