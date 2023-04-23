@@ -30,10 +30,6 @@ public class TaskExecutionReport {
   @Column(name = "task_id")
   private Integer taskId;
 
-  @OneToMany
-  @JoinColumn(name = "task_execution_id", referencedColumnName = "task_execution_id")
-  private List<TaskStepExecutionReport> taskStepExecutionReports;
-
   @Column(name = "start_date_time")
   private Timestamp startDateTime;
 
