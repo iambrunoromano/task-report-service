@@ -56,7 +56,7 @@ public class TaskStepExecutionReportService {
     return checkListNotEmpty(taskStepExecutionReportList, taskExecutionId);
   }
 
-  private List<TaskStepExecutionReport> checkListNotEmpty(
+  public List<TaskStepExecutionReport> checkListNotEmpty(
       List<TaskStepExecutionReport> taskStepExecutionReportList, Integer taskExecutionId)
       throws TaskStepExecutionReportNotFoundException {
     if (taskStepExecutionReportList.isEmpty()) {
