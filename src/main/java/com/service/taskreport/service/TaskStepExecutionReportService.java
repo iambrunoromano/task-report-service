@@ -6,6 +6,7 @@ import com.service.taskreport.exception.TaskStepExecutionReportBadRequestExcepti
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.repository.TaskStepExecutionReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,6 +44,21 @@ public class TaskStepExecutionReportService {
       throws TaskStepExecutionReportNotFoundException {
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionId);
+    return checkListNotEmpty(taskStepExecutionReportList, taskExecutionId);
+  }
+
+  public List<TaskStepExecutionReport> getSortedByTaskExecutionId(
+      Integer taskExecutionId, Sort.Direction direction, String columnName)
+      throws TaskStepExecutionReportNotFoundException {
+    Sort sort = Sort.by(direction, columnName);
+    List<TaskStepExecutionReport> taskStepExecutionReportList =
+        taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionId, sort);
+    return checkListNotEmpty(taskStepExecutionReportList, taskExecutionId);
+  }
+
+  private List<TaskStepExecutionReport> checkListNotEmpty(
+      List<TaskStepExecutionReport> taskStepExecutionReportList, Integer taskExecutionId)
+      throws TaskStepExecutionReportNotFoundException {
     if (taskStepExecutionReportList.isEmpty()) {
       throw new TaskStepExecutionReportNotFoundException(
           String.format(
@@ -62,7 +78,7 @@ public class TaskStepExecutionReportService {
     if (taskStepExecutionReportList.isEmpty()) {
       List<Integer> idList =
           taskExecutionReportList.stream()
-              .map(taskExecutionReport -> taskExecutionReport.getTaskId())
+              .map(TaskExecutionReport::getTaskId)
               .collect(Collectors.toList());
       throw new TaskStepExecutionReportNotFoundException(
           String.format(
@@ -80,6 +96,15 @@ public class TaskStepExecutionReportService {
         taskStepExecutionReportRepository.delete(taskStepExecutionReport);
       }
     }
+  }
+
+  public TaskStepExecutionReport save(TaskStepExecutionReport taskStepExecutionReport) {
+    return taskStepExecutionReportRepository.save(taskStepExecutionReport);
+  }
+
+  public void delete(Integer id) throws TaskStepExecutionReportNotFoundException {
+    TaskStepExecutionReport taskStepExecutionReport = getById(id);
+    taskStepExecutionReportRepository.delete(taskStepExecutionReport);
   }
 
   private List<TaskStepExecutionReport> getByTaskExecutionReports(
