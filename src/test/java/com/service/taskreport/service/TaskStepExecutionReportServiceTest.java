@@ -1,8 +1,10 @@
 package com.service.taskreport.service;
 
 import com.service.taskreport.TestUtility;
+import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.enums.TaskStepExecutionReportColumnNameEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
+import com.service.taskreport.exception.TaskStepExecutionReportBadRequestException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.repository.TaskStepExecutionReportRepository;
 import org.junit.jupiter.api.Test;
@@ -11,9 +13,12 @@ import org.mockito.Mockito;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TaskStepExecutionReportServiceTest extends TestUtility {
   private final TaskStepExecutionReportRepository taskStepExecutionReportRepository =
@@ -95,5 +100,48 @@ class TaskStepExecutionReportServiceTest extends TestUtility {
             TASK_EXECUTION_ID,
             Sort.Direction.ASC,
             TaskStepExecutionReportColumnNameEnum.startDateTime.getValue()));
+  }
+
+  @Test
+  void getByTaskExecutionReportListEmptyTaskExecutionReportListTest() {
+    TaskStepExecutionReportBadRequestException actualException =
+        assertThrows(
+            TaskStepExecutionReportBadRequestException.class,
+            () -> {
+              taskStepExecutionReportService.getByTaskExecutionReportList(new ArrayList<>());
+            });
+    assertEquals("TaskExecutionReport empty list", actualException.getMessage());
+  }
+
+  @Test
+  void getByTaskExecutionReportListEmptyTaskStepExecutionReportListTest() {
+    BDDMockito.given(taskStepExecutionReportRepository.findByTaskExecutionId(ID))
+        .willReturn(new ArrayList<>());
+    TaskStepExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskStepExecutionReportNotFoundException.class,
+            () -> {
+              taskStepExecutionReportService.getByTaskExecutionReportList(
+                  buildTaskExecutionReportList());
+            });
+    assertEquals(
+        String.format(
+            "TaskStepExecutionReport for taskExecutionReportList with ids [%s] not found",
+            Arrays.asList(ID, ID)),
+        actualException.getMessage());
+  }
+
+  @Test
+  void getByTaskExecutionReportListTest()
+      throws TaskStepExecutionReportBadRequestException, TaskStepExecutionReportNotFoundException {
+    BDDMockito.given(taskStepExecutionReportRepository.findByTaskExecutionId(ID))
+        .willReturn(buildTaskStepExecutionReportList());
+    List<TaskStepExecutionReport> expectedTaskStepExecutionReportList = new ArrayList<>();
+    expectedTaskStepExecutionReportList.addAll(buildTaskStepExecutionReportList());
+    expectedTaskStepExecutionReportList.addAll(buildTaskStepExecutionReportList());
+    assertEquals(
+        expectedTaskStepExecutionReportList,
+        taskStepExecutionReportService.getByTaskExecutionReportList(
+            buildTaskExecutionReportList()));
   }
 }
