@@ -144,4 +144,28 @@ class TaskStepExecutionReportServiceTest extends TestUtility {
         taskStepExecutionReportService.getByTaskExecutionReportList(
             buildTaskExecutionReportList()));
   }
+
+  @Test
+  void saveTest() {
+    BDDMockito.given(taskStepExecutionReportRepository.save(buildTaskStepExecutionReport()))
+        .willReturn(buildTaskStepExecutionReport());
+    assertEquals(
+        buildTaskStepExecutionReport(),
+        taskStepExecutionReportService.save(buildTaskStepExecutionReport()));
+  }
+
+  @Test
+  void deleteNotFoundTest() {
+    BDDMockito.given(taskStepExecutionReportRepository.findById(Mockito.anyInt()))
+        .willReturn(Optional.empty());
+    TaskStepExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskStepExecutionReportNotFoundException.class,
+            () -> {
+              taskStepExecutionReportService.delete(ID);
+            });
+    assertEquals(
+        String.format("TaskStepExecutionReport for id [%s] not found", ID),
+        actualException.getMessage());
+  }
 }
