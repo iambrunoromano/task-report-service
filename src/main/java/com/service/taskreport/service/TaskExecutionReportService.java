@@ -18,13 +18,16 @@ public class TaskExecutionReportService {
 
   private final TaskExecutionReportRepository taskExecutionReportRepository;
   private final TaskStepExecutionReportRepository taskStepExecutionReportRepository;
+  private final TaskStepExecutionReportService taskStepExecutionReportService;
 
   @Autowired
   TaskExecutionReportService(
       TaskExecutionReportRepository taskExecutionReportRepository,
-      TaskStepExecutionReportRepository taskStepExecutionReportRepository) {
+      TaskStepExecutionReportRepository taskStepExecutionReportRepository,
+      TaskStepExecutionReportService taskStepExecutionReportService) {
     this.taskExecutionReportRepository = taskExecutionReportRepository;
     this.taskStepExecutionReportRepository = taskStepExecutionReportRepository;
+    this.taskStepExecutionReportService = taskStepExecutionReportService;
   }
 
   public List<TaskExecutionReport> getAll() {
@@ -59,6 +62,7 @@ public class TaskExecutionReportService {
 
   public void delete(Integer id) throws TaskExecutionReportNotFoundException {
     TaskExecutionReport taskExecutionReport = getById(id);
+    taskStepExecutionReportService.deleteByTaskExecutionId(id);
     taskExecutionReportRepository.delete(taskExecutionReport);
   }
 
