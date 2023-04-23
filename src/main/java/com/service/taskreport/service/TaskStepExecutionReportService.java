@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +26,17 @@ public class TaskStepExecutionReportService {
 
   public List<TaskStepExecutionReport> getAll() {
     return taskStepExecutionReportRepository.findAll();
+  }
+
+  public TaskStepExecutionReport getById(Integer id)
+      throws TaskStepExecutionReportNotFoundException {
+    Optional<TaskStepExecutionReport> optionalTaskExecutionReport =
+        taskStepExecutionReportRepository.findById(id);
+    if (optionalTaskExecutionReport.isPresent()) {
+      return optionalTaskExecutionReport.get();
+    }
+    throw new TaskStepExecutionReportNotFoundException(
+        String.format("TaskStepExecutionReport for id [%s] not found", id));
   }
 
   public List<TaskStepExecutionReport> getByTaskExecutionId(Integer taskExecutionId)
