@@ -80,7 +80,7 @@ public class TaskExecutionReportService {
         failure = true;
       }
     }
-    return setTaskExecutionReportStatus(taskExecutionReport, success, running, failure);
+    return transferStatus(taskExecutionReport, success, running, failure);
   }
 
   public List<TaskExecutionReport> getByStatus(StatusEnum status)
@@ -98,7 +98,7 @@ public class TaskExecutionReportService {
     return taskExecutionReportRepository.findAllByOrderByExecutionTimeSecondsAsc();
   }
 
-  private TaskExecutionReport setTaskExecutionReportStatus(
+  public TaskExecutionReport transferStatus(
       TaskExecutionReport taskExecutionReport, boolean success, boolean running, boolean failure)
       throws UndefinedStatusException {
     if (running) {
