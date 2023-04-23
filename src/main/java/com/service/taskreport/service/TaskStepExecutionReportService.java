@@ -63,12 +63,10 @@ public class TaskStepExecutionReportService {
   private List<TaskStepExecutionReport> getByTaskExecutionReports(
       List<TaskExecutionReport> taskExecutionReportList) {
     List<TaskStepExecutionReport> taskStepExecutionReportList = new ArrayList<>();
-    taskExecutionReportList.stream()
-        .map(
-            taskExecutionReport ->
-                taskStepExecutionReportList.addAll(
-                    taskStepExecutionReportRepository.findByTaskExecutionId(
-                        taskExecutionReport.getId())));
+    for (TaskExecutionReport taskExecutionReport : taskExecutionReportList) {
+      taskStepExecutionReportList.addAll(
+          taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionReport.getId()));
+    }
     return taskStepExecutionReportList;
   }
 }
