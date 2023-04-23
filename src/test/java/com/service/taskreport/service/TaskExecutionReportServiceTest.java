@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,6 +80,39 @@ class TaskExecutionReportServiceTest extends TestUtility {
             });
     assertEquals(
         String.format("Status for TaskExecutionReport with id [%s] is undefined", ID),
+        actualException.getMessage());
+  }
+
+  @Test
+  void getAllOrderByExecutionTimeSecondsTest() {
+    BDDMockito.given(taskExecutionReportRepository.findAllByOrderByExecutionTimeSecondsAsc())
+        .willReturn(buildTaskExecutionReportList());
+    assertEquals(
+        buildTaskExecutionReportList(),
+        taskExecutionReportService.getAllOrderByExecutionTimeSeconds());
+  }
+
+  @Test
+  void getByStatusFoundTest() throws TaskExecutionReportNotFoundException {
+    BDDMockito.given(taskExecutionReportRepository.findByStatus(Mockito.any(StatusEnum.class)))
+        .willReturn(buildTaskExecutionReportList());
+    assertEquals(
+        buildTaskExecutionReportList(), taskExecutionReportService.getByStatus(StatusEnum.RUNNING));
+  }
+
+  @Test
+  void getByStatusNotFoundTest() {
+    BDDMockito.given(taskExecutionReportRepository.findByStatus(Mockito.any(StatusEnum.class)))
+        .willReturn(new ArrayList<>());
+    TaskExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskExecutionReportNotFoundException.class,
+            () -> {
+              taskExecutionReportService.getByStatus(StatusEnum.RUNNING);
+            });
+    assertEquals(
+        String.format(
+            "TaskExecutionReport for status [%s] not found", StatusEnum.RUNNING.getValue()),
         actualException.getMessage());
   }
 
