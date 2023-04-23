@@ -1,7 +1,5 @@
 package com.service.taskreport;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.taskreport.entity.TaskExecutionReport;
 import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.enums.StatusEnum;
@@ -38,6 +36,9 @@ public class TestUtility {
 
   protected static final Timestamp SECOND_END_DATE_TIME = getTimestamp("2023-01-01 00:00:59");
   protected static final Integer SECOND_EXECUTION_TIME_SECONDS = 59;
+
+  protected static final Integer SECOND_ID = 3;
+  protected static final Integer SECOND_TASK_ID = 3;
 
   private static Timestamp getTimestamp(String input) {
     Timestamp timestamp = Timestamp.from(Instant.now());
@@ -92,55 +93,49 @@ public class TestUtility {
         .build();
   }
 
-  protected String convertToJson(ObjectMapper objectMapper, Object object) {
-    String converted = "";
-    try {
-      converted = objectMapper.writeValueAsString(object);
-    } catch (JsonProcessingException jsonProcessingException) {
-      System.out.println(jsonProcessingException.getMessage());
-    }
-    return converted;
-  }
-
   protected List<TaskExecutionReportResponse> buildGetAllTaskResponses() {
     TaskExecutionReportResponse firstTaskExecutionReportResponse =
-        buildFirstTaskExecutionReportResponse();
+        buildFirstTaskExecutionReportResponse(ID, FIRST_TASK_ID);
     TaskExecutionReportResponse secondTaskExecutionReportResponse =
-        buildSecondTaskExecutionReportResponse();
+        buildSecondTaskExecutionReportResponse(ID, FIRST_TASK_ID);
     return Arrays.asList(firstTaskExecutionReportResponse, secondTaskExecutionReportResponse);
   }
 
-  private TaskExecutionReportResponse buildSecondTaskExecutionReportResponse() {
+  private TaskExecutionReportResponse buildSecondTaskExecutionReportResponse(
+      Integer id, Integer taskId) {
+    Integer secondId = id + 1;
+    Integer secondTaskId = taskId + 1;
     return TaskExecutionReportResponse.builder()
-        .id(ID + 1)
-        .taskId(FIRST_TASK_ID + 1)
+        .id(secondId)
+        .taskId(secondTaskId)
         .startDateTime(START_DATE_TIME)
         .endDateTime(SECOND_END_DATE_TIME)
         .executionTimeSeconds(SECOND_EXECUTION_TIME_SECONDS)
         .errorMessage("")
         .status(StatusEnum.SUCCESS)
-        .taskStepExecutionReports(buildSecondTaskStepResponses())
+        .taskStepExecutionReports(buildSecondTaskStepResponses(secondId))
         .build();
   }
 
-  private TaskExecutionReportResponse buildFirstTaskExecutionReportResponse() {
+  protected TaskExecutionReportResponse buildFirstTaskExecutionReportResponse(
+      Integer id, Integer taskId) {
     return TaskExecutionReportResponse.builder()
-        .id(ID)
-        .taskId(FIRST_TASK_ID)
+        .id(id)
+        .taskId(taskId)
         .startDateTime(START_DATE_TIME)
         .endDateTime(FIRST_END_DATE_TIME)
         .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
         .errorMessage("")
         .status(StatusEnum.FAILURE)
-        .taskStepExecutionReports(buildFirstTaskStepResponses())
+        .taskStepExecutionReports(buildFirstTaskStepResponses(id))
         .build();
   }
 
-  protected List<TaskStepExecutionReportResponse> buildFirstTaskStepResponses() {
+  protected List<TaskStepExecutionReportResponse> buildFirstTaskStepResponses(Integer id) {
     TaskStepExecutionReportResponse firstTaskStepExecutionReportResponse =
         TaskStepExecutionReportResponse.builder()
-            .id(ID)
-            .taskExecutionId(ID)
+            .id(id)
+            .taskExecutionId(id)
             .stepName(FIRST_STEP_NAME)
             .status(StatusEnum.SUCCESS)
             .startDateTime(START_DATE_TIME)
@@ -148,26 +143,14 @@ public class TestUtility {
             .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
             .errorMessage("")
             .build();
-    TaskStepExecutionReportResponse secondTaskStepExecutionReportResponse =
-        TaskStepExecutionReportResponse.builder()
-            .id(ID + 1)
-            .taskExecutionId(ID)
-            .stepName(SECOND_STEP_NAME)
-            .status(StatusEnum.FAILURE)
-            .startDateTime(START_DATE_TIME)
-            .endDateTime(FIRST_END_DATE_TIME)
-            .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
-            .errorMessage("")
-            .build();
-    return Arrays.asList(
-        firstTaskStepExecutionReportResponse, secondTaskStepExecutionReportResponse);
+    return Arrays.asList(firstTaskStepExecutionReportResponse);
   }
 
-  protected List<TaskStepExecutionReportResponse> buildSecondTaskStepResponses() {
+  protected List<TaskStepExecutionReportResponse> buildSecondTaskStepResponses(Integer id) {
     TaskStepExecutionReportResponse firstTaskStepExecutionReportResponse =
         TaskStepExecutionReportResponse.builder()
-            .id(ID + 2)
-            .taskExecutionId(ID + 1)
+            .id(id)
+            .taskExecutionId(id)
             .stepName(FIRST_STEP_NAME)
             .status(StatusEnum.SUCCESS)
             .startDateTime(START_DATE_TIME)
@@ -175,18 +158,6 @@ public class TestUtility {
             .executionTimeSeconds(SECOND_EXECUTION_TIME_SECONDS)
             .errorMessage("")
             .build();
-    TaskStepExecutionReportResponse secondTaskStepExecutionReportResponse =
-        TaskStepExecutionReportResponse.builder()
-            .id(ID + 3)
-            .taskExecutionId(ID + 1)
-            .stepName(SECOND_STEP_NAME)
-            .status(StatusEnum.SUCCESS)
-            .startDateTime(START_DATE_TIME)
-            .endDateTime(SECOND_END_DATE_TIME)
-            .executionTimeSeconds(SECOND_EXECUTION_TIME_SECONDS)
-            .errorMessage("")
-            .build();
-    return Arrays.asList(
-        firstTaskStepExecutionReportResponse, secondTaskStepExecutionReportResponse);
+    return Arrays.asList(firstTaskStepExecutionReportResponse);
   }
 }
