@@ -1,5 +1,6 @@
 package com.service.taskreport.entity;
 
+import com.service.taskreport.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,6 +45,10 @@ public class TaskExecutionReport {
 
   @Column(name = "error_message")
   private String errorMessage;
+
+  @Column(name = "status")
+  @Enumerated(EnumType.STRING)
+  private StatusEnum status;
 
   @CreationTimestamp
   @Column(
