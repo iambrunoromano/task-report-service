@@ -104,28 +104,36 @@ public class TestUtility {
 
   protected List<TaskExecutionReportResponse> buildGetAllTaskResponses() {
     TaskExecutionReportResponse firstTaskExecutionReportResponse =
-        TaskExecutionReportResponse.builder()
-            .id(ID)
-            .taskId(FIRST_TASK_ID)
-            .startDateTime(START_DATE_TIME)
-            .endDateTime(FIRST_END_DATE_TIME)
-            .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
-            .errorMessage("")
-            .status(StatusEnum.FAILURE)
-            .taskStepExecutionReports(buildFirstTaskStepResponses())
-            .build();
+        buildFirstTaskExecutionReportResponse();
     TaskExecutionReportResponse secondTaskExecutionReportResponse =
-        TaskExecutionReportResponse.builder()
-            .id(ID + 1)
-            .taskId(FIRST_TASK_ID + 1)
-            .startDateTime(START_DATE_TIME)
-            .endDateTime(SECOND_END_DATE_TIME)
-            .executionTimeSeconds(SECOND_EXECUTION_TIME_SECONDS)
-            .errorMessage("")
-            .status(StatusEnum.SUCCESS)
-            .taskStepExecutionReports(buildSecondTaskStepResponses())
-            .build();
+        buildSecondTaskExecutionReportResponse();
     return Arrays.asList(firstTaskExecutionReportResponse, secondTaskExecutionReportResponse);
+  }
+
+  private TaskExecutionReportResponse buildSecondTaskExecutionReportResponse() {
+    return TaskExecutionReportResponse.builder()
+        .id(ID + 1)
+        .taskId(FIRST_TASK_ID + 1)
+        .startDateTime(START_DATE_TIME)
+        .endDateTime(SECOND_END_DATE_TIME)
+        .executionTimeSeconds(SECOND_EXECUTION_TIME_SECONDS)
+        .errorMessage("")
+        .status(StatusEnum.SUCCESS)
+        .taskStepExecutionReports(buildSecondTaskStepResponses())
+        .build();
+  }
+
+  private TaskExecutionReportResponse buildFirstTaskExecutionReportResponse() {
+    return TaskExecutionReportResponse.builder()
+        .id(ID)
+        .taskId(FIRST_TASK_ID)
+        .startDateTime(START_DATE_TIME)
+        .endDateTime(FIRST_END_DATE_TIME)
+        .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
+        .errorMessage("")
+        .status(StatusEnum.FAILURE)
+        .taskStepExecutionReports(buildFirstTaskStepResponses())
+        .build();
   }
 
   protected List<TaskStepExecutionReportResponse> buildFirstTaskStepResponses() {
