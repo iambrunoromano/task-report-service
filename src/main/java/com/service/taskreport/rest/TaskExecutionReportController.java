@@ -107,6 +107,7 @@ public class TaskExecutionReportController {
   public ResponseEntity<Void> delete(@PathVariable Integer id)
       throws TaskExecutionReportNotFoundException {
     taskExecutionReportService.delete(id);
+    taskStepExecutionReportService.deleteByTaskExecutionId(id);
     return ResponseEntity.ok().build();
   }
 

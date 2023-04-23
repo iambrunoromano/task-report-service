@@ -60,6 +60,16 @@ public class TaskStepExecutionReportService {
     return taskStepExecutionReportList;
   }
 
+  public void deleteByTaskExecutionId(Integer taskExecutionId) {
+    List<TaskStepExecutionReport> taskStepExecutionReportList =
+        taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionId);
+    if (!taskStepExecutionReportList.isEmpty()) {
+      for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
+        taskStepExecutionReportRepository.delete(taskStepExecutionReport);
+      }
+    }
+  }
+
   private List<TaskStepExecutionReport> getByTaskExecutionReports(
       List<TaskExecutionReport> taskExecutionReportList) {
     List<TaskStepExecutionReport> taskStepExecutionReportList = new ArrayList<>();
