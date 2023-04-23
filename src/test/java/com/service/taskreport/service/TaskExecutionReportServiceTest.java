@@ -24,9 +24,13 @@ class TaskExecutionReportServiceTest extends TestUtility {
       Mockito.mock(TaskExecutionReportRepository.class);
   private final TaskStepExecutionReportRepository taskStepExecutionReportRepository =
       Mockito.mock(TaskStepExecutionReportRepository.class);
+  private final TaskStepExecutionReportService taskStepExecutionReportService =
+      Mockito.mock(TaskStepExecutionReportService.class);
   private final TaskExecutionReportService taskExecutionReportService =
       new TaskExecutionReportService(
-          taskExecutionReportRepository, taskStepExecutionReportRepository);
+          taskExecutionReportRepository,
+          taskStepExecutionReportRepository,
+          taskStepExecutionReportService);
 
   @Test
   void getAllTest() {
@@ -147,6 +151,21 @@ class TaskExecutionReportServiceTest extends TestUtility {
             });
     assertEquals(
         String.format("Status for TaskExecutionReport with id [%s] is undefined", ID),
+        actualException.getMessage());
+  }
+
+  @Test
+  void deleteNotFoundTest() {
+    BDDMockito.given(taskExecutionReportRepository.findById(Mockito.anyInt()))
+        .willReturn(Optional.empty());
+    TaskExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskExecutionReportNotFoundException.class,
+            () -> {
+              taskExecutionReportService.delete(ID);
+            });
+    assertEquals(
+        String.format("TaskExecutionReport for id [%s] not found", ID),
         actualException.getMessage());
   }
 
