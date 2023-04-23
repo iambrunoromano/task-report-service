@@ -4,7 +4,6 @@ import com.service.taskreport.entity.TaskExecutionReport;
 import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
-import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.repository.TaskExecutionReportRepository;
 import com.service.taskreport.repository.TaskStepExecutionReportRepository;
