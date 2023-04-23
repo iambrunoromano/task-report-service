@@ -1,5 +1,6 @@
 package com.service.taskreport.response;
 
+import com.service.taskreport.enums.StatusEnum;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -13,4 +14,5 @@ public class TaskExecutionReportResponse {
   private Timestamp startDateTime;
   private Integer executionTimeSeconds;
   private String errorMessage;
+  private StatusEnum status;
 }
