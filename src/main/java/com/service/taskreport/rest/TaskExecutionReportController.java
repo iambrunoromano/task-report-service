@@ -1,6 +1,7 @@
 package com.service.taskreport.rest;
 
 import com.service.taskreport.entity.TaskExecutionReport;
+import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
@@ -35,6 +36,25 @@ public class TaskExecutionReportController {
   @GetMapping
   public ResponseEntity<List<TaskExecutionReportResponse>> getAll() {
     List<TaskExecutionReport> taskExecutionReportList = taskExecutionReportService.getAll();
+    List<TaskExecutionReportResponse> taskExecutionReportResponseList =
+        mapListToResponse(taskExecutionReportList);
+    return ResponseEntity.ok(taskExecutionReportResponseList);
+  }
+
+  @GetMapping(value = "/status/{status}")
+  public ResponseEntity<List<TaskExecutionReportResponse>> getAllByStatus(
+      @PathVariable StatusEnum status) throws TaskExecutionReportNotFoundException {
+    List<TaskExecutionReport> taskExecutionReportList =
+        taskExecutionReportService.getByStatus(status);
+    List<TaskExecutionReportResponse> taskExecutionReportResponseList =
+        mapListToResponse(taskExecutionReportList);
+    return ResponseEntity.ok(taskExecutionReportResponseList);
+  }
+
+  @GetMapping(value = "/execution-time")
+  public ResponseEntity<List<TaskExecutionReportResponse>> getAllOrderByExecutionTime() {
+    List<TaskExecutionReport> taskExecutionReportList =
+        taskExecutionReportService.getAllOrderByExecutionTimeSeconds();
     List<TaskExecutionReportResponse> taskExecutionReportResponseList =
         mapListToResponse(taskExecutionReportList);
     return ResponseEntity.ok(taskExecutionReportResponseList);
