@@ -41,6 +41,9 @@ public class TestUtility {
 
   protected static final Integer THIRD_TASK_ID = 5;
 
+  protected static final Integer THIRD_ID = 6;
+  protected static final Integer FOURTH_TASK_ID = 6;
+
   private static Timestamp getTimestamp(String input) {
     Timestamp timestamp = Timestamp.from(Instant.now());
     try {
@@ -99,6 +102,14 @@ public class TestUtility {
         buildFirstTaskExecutionReportResponse(ID, FIRST_TASK_ID);
     TaskExecutionReportResponse secondTaskExecutionReportResponse =
         buildSecondTaskExecutionReportResponse(ID, FIRST_TASK_ID);
+    return Arrays.asList(firstTaskExecutionReportResponse, secondTaskExecutionReportResponse);
+  }
+
+  protected List<TaskExecutionReportResponse> buildGetAllOrderByExecutionTime() {
+    TaskExecutionReportResponse firstTaskExecutionReportResponse =
+            buildSecondTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
+    TaskExecutionReportResponse secondTaskExecutionReportResponse =
+        buildFirstTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
     return Arrays.asList(firstTaskExecutionReportResponse, secondTaskExecutionReportResponse);
   }
 
