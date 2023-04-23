@@ -2,6 +2,8 @@ package com.service.taskreport.rest;
 
 import com.service.taskreport.entity.TaskExecutionReport;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
+import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
+import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.mapper.EntityResponseMapper;
 import com.service.taskreport.mapper.RequestEntityMapper;
 import com.service.taskreport.request.TaskExecutionReportRequest;
@@ -48,7 +50,8 @@ public class TaskExecutionReportController {
 
   @PostMapping
   public ResponseEntity<TaskExecutionReportResponse> create(
-      TaskExecutionReportRequest taskExecutionReportRequest) {
+      TaskExecutionReportRequest taskExecutionReportRequest)
+      throws TaskStepExecutionReportNotFoundException, UndefinedStatusException {
     TaskExecutionReport taskExecutionReport = mapToEntity(taskExecutionReportRequest);
     taskExecutionReport = taskExecutionReportService.save(taskExecutionReport);
     TaskExecutionReportResponse taskExecutionReportResponse = mapToResponse(taskExecutionReport);
