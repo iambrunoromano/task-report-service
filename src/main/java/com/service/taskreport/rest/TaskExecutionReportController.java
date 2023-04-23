@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "task-execution-reports")
@@ -65,9 +64,8 @@ public class TaskExecutionReportController {
 
   private List<TaskExecutionReportResponse> mapListToResponse(
       List<TaskExecutionReport> taskExecutionReportList) {
-    return taskExecutionReportList.stream()
-        .map(entityResponseMapper::taskExecutionReportToTaskExecutionReportResponse)
-        .collect(Collectors.toList());
+    return entityResponseMapper.taskExecutionReportListToTaskExecutionReportResponseList(
+        taskExecutionReportList);
   }
 
   private TaskExecutionReport mapToEntity(TaskExecutionReportRequest taskExecutionReportRequest) {
