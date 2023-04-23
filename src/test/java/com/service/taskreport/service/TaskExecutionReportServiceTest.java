@@ -169,6 +169,18 @@ class TaskExecutionReportServiceTest extends TestUtility {
         actualException.getMessage());
   }
 
+  @Test
+  void saveTest() throws UndefinedStatusException {
+    BDDMockito.given(taskExecutionReportRepository.save(Mockito.any()))
+        .willReturn(buildTaskExecutionReport());
+    BDDMockito.given(taskStepExecutionReportRepository.save(Mockito.any()))
+        .willReturn(buildTaskStepExecutionReport());
+    assertEquals(
+        buildTaskExecutionReport(),
+        taskExecutionReportService.save(
+            buildTaskExecutionReport(), buildTaskStepExecutionReportList()));
+  }
+
   private void doNonSuccessTaskExecutionReportStatusTest(StatusEnum status)
       throws UndefinedStatusException {
     List<TaskStepExecutionReport> taskStepExecutionReportList = buildTaskStepExecutionReportList();
