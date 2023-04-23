@@ -69,6 +69,21 @@ public class TaskExecutionReportService {
     return setTaskExecutionReportStatus(taskExecutionReport, success, running, failure);
   }
 
+  public List<TaskExecutionReport> getByStatus(StatusEnum status)
+      throws TaskExecutionReportNotFoundException {
+    List<TaskExecutionReport> taskExecutionReportList =
+        taskExecutionReportRepository.findByStatus(status);
+    if (taskExecutionReportList.isEmpty()) {
+      throw new TaskExecutionReportNotFoundException(
+          String.format("TaskExecutionReport for status [%s] not found", status.getValue()));
+    }
+    return taskExecutionReportList;
+  }
+
+  public List<TaskExecutionReport> getAllOrderByExecutionTimeSeconds() {
+    return taskExecutionReportRepository.findAllByOrderByExecutionTimeSecondsAsc();
+  }
+
   private TaskExecutionReport setTaskExecutionReportStatus(
       TaskExecutionReport taskExecutionReport, boolean success, boolean running, boolean failure)
       throws UndefinedStatusException {
