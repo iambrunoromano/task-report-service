@@ -32,7 +32,6 @@ public class TestUtility {
 
   protected static final Integer TASK_EXECUTION_ID = 1;
   protected static final String FIRST_STEP_NAME = "step_1";
-  protected static final String SECOND_STEP_NAME = "step_2";
 
   protected static final Timestamp SECOND_END_DATE_TIME = getTimestamp("2023-01-01 00:00:59");
   protected static final Integer SECOND_EXECUTION_TIME_SECONDS = 59;
