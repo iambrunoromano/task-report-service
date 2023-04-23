@@ -7,6 +7,7 @@ import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.repository.TaskExecutionReportRepository;
+import com.service.taskreport.repository.TaskStepExecutionReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,14 @@ import java.util.Optional;
 public class TaskExecutionReportService {
 
   private final TaskExecutionReportRepository taskExecutionReportRepository;
+  private final TaskStepExecutionReportRepository taskStepExecutionReportRepository;
 
   @Autowired
-  TaskExecutionReportService(TaskExecutionReportRepository taskExecutionReportRepository) {
+  TaskExecutionReportService(
+      TaskExecutionReportRepository taskExecutionReportRepository,
+      TaskStepExecutionReportRepository taskStepExecutionReportRepository) {
     this.taskExecutionReportRepository = taskExecutionReportRepository;
+    this.taskStepExecutionReportRepository = taskStepExecutionReportRepository;
   }
 
   public List<TaskExecutionReport> getAll() {
@@ -37,10 +42,20 @@ public class TaskExecutionReportService {
         String.format("TaskExecutionReport for id [%s] not found", id));
   }
 
-  public TaskExecutionReport save(TaskExecutionReport taskExecutionReport)
-      throws TaskStepExecutionReportNotFoundException, UndefinedStatusException {
-    taskExecutionReport = setTaskExecutionReportStatus(taskExecutionReport);
-    return taskExecutionReportRepository.save(taskExecutionReport);
+  public TaskExecutionReport save(
+      TaskExecutionReport taskExecutionReport,
+      List<TaskStepExecutionReport> taskStepExecutionReportList)
+      throws UndefinedStatusException {
+    taskExecutionReport =
+        setTaskExecutionReportStatus(taskExecutionReport, taskStepExecutionReportList);
+    taskExecutionReport = taskExecutionReportRepository.save(taskExecutionReport);
+    if (!taskStepExecutionReportList.isEmpty()) {
+      for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
+        taskStepExecutionReport.setTaskExecutionId(taskExecutionReport.getId());
+        taskStepExecutionReportRepository.save(taskStepExecutionReport);
+      }
+    }
+    return taskExecutionReport;
   }
 
   public void delete(Integer id) throws TaskExecutionReportNotFoundException {
@@ -48,10 +63,10 @@ public class TaskExecutionReportService {
     taskExecutionReportRepository.delete(taskExecutionReport);
   }
 
-  public TaskExecutionReport setTaskExecutionReportStatus(TaskExecutionReport taskExecutionReport)
-      throws TaskStepExecutionReportNotFoundException, UndefinedStatusException {
-    List<TaskStepExecutionReport> taskStepExecutionReportList =
-        checkTaskStepExecutionReportList(taskExecutionReport);
+  public TaskExecutionReport setTaskExecutionReportStatus(
+      TaskExecutionReport taskExecutionReport,
+      List<TaskStepExecutionReport> taskStepExecutionReportList)
+      throws UndefinedStatusException {
     boolean success = true;
     boolean running = false;
     boolean failure = false;
@@ -104,18 +119,5 @@ public class TaskExecutionReportService {
         String.format(
             "Status for TaskExecutionReport with id [%s] is undefined",
             taskExecutionReport.getId()));
-  }
-
-  private List<TaskStepExecutionReport> checkTaskStepExecutionReportList(
-      TaskExecutionReport taskExecutionReport) throws TaskStepExecutionReportNotFoundException {
-    List<TaskStepExecutionReport> taskStepExecutionReportList =
-        taskExecutionReport.getTaskStepExecutionReports();
-    if (taskStepExecutionReportList.isEmpty()) {
-      throw new TaskStepExecutionReportNotFoundException(
-          String.format(
-              "TaskStepExecutionReport for TaskExecutionReport with id [%s] not found",
-              taskExecutionReport.getId()));
-    }
-    return taskStepExecutionReportList;
   }
 }
