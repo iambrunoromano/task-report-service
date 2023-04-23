@@ -70,7 +70,7 @@ public class TaskExecutionReportController {
 
   @PostMapping
   public ResponseEntity<TaskExecutionReportResponse> create(
-      TaskExecutionReportRequest taskExecutionReportRequest)
+      @RequestBody TaskExecutionReportRequest taskExecutionReportRequest)
       throws TaskStepExecutionReportNotFoundException, UndefinedStatusException {
     TaskExecutionReport taskExecutionReport = mapToEntity(taskExecutionReportRequest);
     taskExecutionReport = taskExecutionReportService.save(taskExecutionReport);
