@@ -99,6 +99,7 @@ public class TaskStepExecutionReportService {
   }
 
   public TaskStepExecutionReport save(TaskStepExecutionReport taskStepExecutionReport) {
+    taskStepExecutionReport = computeSeconds(taskStepExecutionReport);
     return taskStepExecutionReportRepository.save(taskStepExecutionReport);
   }
 
@@ -115,5 +116,16 @@ public class TaskStepExecutionReportService {
           taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionReport.getId()));
     }
     return taskStepExecutionReportList;
+  }
+
+  public TaskStepExecutionReport computeSeconds(TaskStepExecutionReport taskStepExecutionReport) {
+    if (taskStepExecutionReport.getEndDateTime() != null
+        && taskStepExecutionReport.getStartDateTime() != null) {
+      long difference =
+          taskStepExecutionReport.getEndDateTime().getTime()
+              - taskStepExecutionReport.getStartDateTime().getTime();
+      taskStepExecutionReport.setExecutionTimeSeconds(Math.round(difference / 1000));
+    }
+    return taskStepExecutionReport;
   }
 }

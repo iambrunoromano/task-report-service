@@ -50,12 +50,26 @@ public class TaskExecutionReportService {
       throws UndefinedStatusException {
     taskExecutionReport =
         setTaskExecutionReportStatus(taskExecutionReport, taskStepExecutionReportList);
-    taskExecutionReport = taskExecutionReportRepository.save(taskExecutionReport);
+    taskExecutionReport = computeSeconds(taskExecutionReport);
+    taskExecutionReportRepository.save(taskExecutionReport);
     if (!taskStepExecutionReportList.isEmpty()) {
       for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
         taskStepExecutionReport.setTaskExecutionId(taskExecutionReport.getId());
+        taskStepExecutionReport =
+            taskStepExecutionReportService.computeSeconds(taskStepExecutionReport);
         taskStepExecutionReportRepository.save(taskStepExecutionReport);
       }
+    }
+    return taskExecutionReport;
+  }
+
+  public TaskExecutionReport computeSeconds(TaskExecutionReport taskExecutionReport) {
+    if (taskExecutionReport.getEndDateTime() != null
+        && taskExecutionReport.getStartDateTime() != null) {
+      long difference =
+          taskExecutionReport.getEndDateTime().getTime()
+              - taskExecutionReport.getStartDateTime().getTime();
+      taskExecutionReport.setExecutionTimeSeconds(Math.round(difference / 1000));
     }
     return taskExecutionReport;
   }
