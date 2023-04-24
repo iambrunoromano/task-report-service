@@ -128,4 +128,9 @@ public class TaskStepExecutionReportService {
     }
     return taskStepExecutionReport;
   }
+
+  public List<TaskStepExecutionReport> getMissingExecutionTime() {
+    return taskStepExecutionReportRepository
+        .findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
+  }
 }
