@@ -121,6 +121,17 @@ public class TestUtility {
     return Arrays.asList(firstTaskExecutionReportResponse, secondTaskExecutionReportResponse);
   }
 
+  protected List<TaskStepExecutionReportResponse> buildGetAllTaskStepResponses() {
+    List<TaskStepExecutionReportResponse> firstTaskStepExecutionReportResponse =
+        buildFirstTaskStepResponses(ID);
+    List<TaskStepExecutionReportResponse> secondTaskStepExecutionReportResponse =
+        buildSecondTaskStepResponses(ID + 1);
+    List<TaskStepExecutionReportResponse> allTaskStepExecutionReportResponse = new ArrayList<>();
+    allTaskStepExecutionReportResponse.addAll(firstTaskStepExecutionReportResponse);
+    allTaskStepExecutionReportResponse.addAll(secondTaskStepExecutionReportResponse);
+    return allTaskStepExecutionReportResponse;
+  }
+
   protected List<TaskExecutionReportResponse> buildGetAllOrderByExecutionTime() {
     TaskExecutionReportResponse firstTaskExecutionReportResponse =
         buildSecondTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
