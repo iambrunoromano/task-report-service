@@ -122,4 +122,18 @@ class TaskExecutionReportControllerTest extends TestUtility {
         buildFirstTaskExecutionReportResponse(FIFTH_ID, FIFTH_TASK_ID), actualResponse.getBody());
     assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
   }
+
+  @Test
+  @Sql("classpath:task/get_by_id_task_not_found.sql")
+  void getByIdTaskNotFoundTest() {
+    TaskExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskExecutionReportNotFoundException.class,
+            () -> {
+              taskExecutionReportController.getById(FIFTH_ID);
+            });
+    assertEquals(
+        String.format("TaskExecutionReport for id [%s] not found", FIFTH_ID),
+        actualException.getMessage());
+  }
 }
