@@ -177,7 +177,7 @@ class TaskExecutionReportServiceTest extends TestUtility {
         .willReturn(buildTaskStepExecutionReport());
     assertEquals(
         buildTaskExecutionReport(),
-        taskExecutionReportService.save(
+        taskExecutionReportService.saveRequest(
             buildTaskExecutionReport(), buildTaskStepExecutionReportList()));
   }
 
