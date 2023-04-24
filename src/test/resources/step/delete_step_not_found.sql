@@ -1,0 +1,2 @@
+TRUNCATE TABLE task_execution_report;
+TRUNCATE TABLE task_step_execution_report;
