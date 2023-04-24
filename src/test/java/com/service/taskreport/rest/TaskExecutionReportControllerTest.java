@@ -111,4 +111,15 @@ class TaskExecutionReportControllerTest extends TestUtility {
             Collections.singletonList(FOURTH_ID)),
         actualException.getMessage());
   }
+
+  @Test
+  @Sql("classpath:task/get_by_id.sql")
+  void getByIdTest()
+      throws TaskStepExecutionReportNotFoundException, TaskExecutionReportNotFoundException {
+    ResponseEntity<TaskExecutionReportResponse> actualResponse =
+        taskExecutionReportController.getById(FIFTH_ID);
+    assertEquals(
+        buildFirstTaskExecutionReportResponse(FIFTH_ID, FIFTH_TASK_ID), actualResponse.getBody());
+    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
 }
