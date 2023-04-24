@@ -5,6 +5,8 @@ import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.TaskStepExecutionReportBadRequestException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
+import com.service.taskreport.exception.UndefinedStatusException;
+import com.service.taskreport.request.TaskExecutionReportRequest;
 import com.service.taskreport.response.TaskExecutionReportResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -102,9 +105,7 @@ class TaskExecutionReportControllerTest extends TestUtility {
     TaskStepExecutionReportNotFoundException actualException =
         assertThrows(
             TaskStepExecutionReportNotFoundException.class,
-            () -> {
-              taskExecutionReportController.getAllOrderByExecutionTime();
-            });
+            taskExecutionReportController::getAllOrderByExecutionTime);
     assertEquals(
         String.format(
             "TaskStepExecutionReport for taskExecutionReportList with ids [%s] not found",
@@ -150,6 +151,35 @@ class TaskExecutionReportControllerTest extends TestUtility {
         String.format(
             "TaskStepExecutionReport for taskExecutionReportList with ids [%s] not found",
             SIXTH_ID),
+        actualException.getMessage());
+  }
+
+  @Test
+  @Sql("classpath:task/create.sql")
+  void createTest() throws TaskStepExecutionReportNotFoundException, UndefinedStatusException {
+    ResponseEntity<TaskExecutionReportResponse> actualResponse =
+        taskExecutionReportController.create(
+            buildTaskExecutionReportRequest(SEVENTH_ID, SEVENTH_TASK_ID));
+    assertEquals(
+        buildFirstTaskExecutionReportResponse(SEVENTH_ID, SEVENTH_TASK_ID),
+        actualResponse.getBody());
+    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
+
+  @Test
+  @Sql("classpath:task/create.sql")
+  void createUndefinedStatusTest() {
+    TaskExecutionReportRequest taskExecutionReportRequest =
+        buildTaskExecutionReportRequest(SEVENTH_ID, SEVENTH_TASK_ID);
+    taskExecutionReportRequest.setTaskStepExecutionReports(new ArrayList<>());
+    UndefinedStatusException actualException =
+        assertThrows(
+            UndefinedStatusException.class,
+            () -> {
+              taskExecutionReportController.create(taskExecutionReportRequest);
+            });
+    assertEquals(
+        String.format("Status for TaskExecutionReport with id [%s] is undefined", SEVENTH_ID),
         actualException.getMessage());
   }
 }
