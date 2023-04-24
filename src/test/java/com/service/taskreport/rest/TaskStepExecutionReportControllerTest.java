@@ -1,6 +1,7 @@
 package com.service.taskreport.rest;
 
 import com.service.taskreport.TestUtility;
+import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.response.TaskExecutionReportResponse;
 import com.service.taskreport.response.TaskStepExecutionReportResponse;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,5 +38,28 @@ class TaskStepExecutionReportControllerTest extends TestUtility {
         taskStepExecutionReportController.getAll();
     assertEquals(buildGetAllTaskStepResponses(), actualResponse.getBody());
     assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
+
+  @Test
+  @Sql("classpath:step/get_by_id.sql")
+  void getByIdTest() throws TaskStepExecutionReportNotFoundException {
+    ResponseEntity<TaskStepExecutionReportResponse> actualResponse =
+        taskStepExecutionReportController.getById(FIFTH_ID);
+    assertEquals(buildFirstTaskStepResponses(FIFTH_ID).get(0), actualResponse.getBody());
+    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
+
+  @Test
+  @Sql("classpath:task/get_by_id_task_step_not_found.sql")
+  void getByIdTaskStepNotFoundTest() {
+    TaskStepExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskStepExecutionReportNotFoundException.class,
+            () -> {
+              taskStepExecutionReportController.getById(SIXTH_ID);
+            });
+    assertEquals(
+        String.format("TaskStepExecutionReport for id [%s] not found", SIXTH_ID),
+        actualException.getMessage());
   }
 }
