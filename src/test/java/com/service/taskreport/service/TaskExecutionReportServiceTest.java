@@ -85,7 +85,7 @@ class TaskExecutionReportServiceTest extends TestUtility {
               doTransferStatusTest(StatusEnum.SUCCESS, false, false, false);
             });
     assertEquals(
-        String.format("Status for TaskExecutionReport with id [%s] is undefined", ID),
+        String.format("Status for TaskExecutionReport with taskId [%s] is undefined", FIRST_TASK_ID),
         actualException.getMessage());
   }
 
@@ -150,7 +150,7 @@ class TaskExecutionReportServiceTest extends TestUtility {
                   buildTaskExecutionReport(), new ArrayList<>());
             });
     assertEquals(
-        String.format("Status for TaskExecutionReport with id [%s] is undefined", ID),
+        String.format("Status for TaskExecutionReport with taskId [%s] is undefined", FIRST_TASK_ID),
         actualException.getMessage());
   }
 

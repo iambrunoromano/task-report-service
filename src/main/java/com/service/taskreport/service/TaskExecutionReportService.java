@@ -123,7 +123,7 @@ public class TaskExecutionReportService {
     }
     throw new UndefinedStatusException(
         String.format(
-            "Status for TaskExecutionReport with id [%s] is undefined",
-            taskExecutionReport.getId()));
+            "Status for TaskExecutionReport with taskId [%s] is undefined",
+            taskExecutionReport.getTaskId()));
   }
 }

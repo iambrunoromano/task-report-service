@@ -178,7 +178,7 @@ class TaskExecutionReportControllerTest extends TestUtility {
               taskExecutionReportController.create(taskExecutionReportRequest);
             });
     assertEquals(
-        String.format("Status for TaskExecutionReport with id [%s] is undefined", SEVENTH_ID),
+        String.format("Status for TaskExecutionReport with taskId [%s] is undefined", SEVENTH_TASK_ID),
         actualException.getMessage());
   }
 
