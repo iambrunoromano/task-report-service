@@ -5,6 +5,7 @@ import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.exception.TaskStepExecutionReportBadRequestException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.repository.TaskStepExecutionReportRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TaskStepExecutionReportService {
 
   private final TaskStepExecutionReportRepository taskStepExecutionReportRepository;
@@ -26,7 +28,10 @@ public class TaskStepExecutionReportService {
   }
 
   public List<TaskStepExecutionReport> getAll() {
-    return taskStepExecutionReportRepository.findAll();
+    List<TaskStepExecutionReport> taskStepExecutionReportList =
+        taskStepExecutionReportRepository.findAll();
+    log.info("Found [{}] taskStepExecutionReport", taskStepExecutionReportList.size());
+    return taskStepExecutionReportList;
   }
 
   public TaskStepExecutionReport getById(Integer id)
@@ -34,7 +39,9 @@ public class TaskStepExecutionReportService {
     Optional<TaskStepExecutionReport> optionalTaskExecutionReport =
         taskStepExecutionReportRepository.findById(id);
     if (optionalTaskExecutionReport.isPresent()) {
-      return optionalTaskExecutionReport.get();
+      TaskStepExecutionReport taskStepExecutionReport = optionalTaskExecutionReport.get();
+      log.info("Found one taskStepExecutionReport for id [{}]: [{}]", id, taskStepExecutionReport);
+      return taskStepExecutionReport;
     }
     throw new TaskStepExecutionReportNotFoundException(
         String.format("TaskStepExecutionReport for id [%s] not found", id));
@@ -64,6 +71,10 @@ public class TaskStepExecutionReportService {
           String.format(
               "TaskStepExecutionReport for taskExecutionId [%s] not found", taskExecutionId));
     }
+    log.info(
+        "Found [{}] taskStepExecutionReport for taskExecutionId [{}}]",
+        taskStepExecutionReportList.size(),
+        taskExecutionId);
     return taskStepExecutionReportList;
   }
 
@@ -91,46 +102,80 @@ public class TaskStepExecutionReportService {
   public void deleteByTaskExecutionId(Integer taskExecutionId) {
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionId);
+    log.info(
+        "Found [{}] taskStepExecutionReports for taskExecutionId [{}]",
+        taskStepExecutionReportList.size(),
+        taskExecutionId);
     if (!taskStepExecutionReportList.isEmpty()) {
       for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
         taskStepExecutionReportRepository.delete(taskStepExecutionReport);
       }
+      log.info(
+          "Deleted [{}] taskStepExecutionReports for taskExecutionId [{}]",
+          taskStepExecutionReportList.size(),
+          taskExecutionId);
     }
   }
 
   public TaskStepExecutionReport save(TaskStepExecutionReport taskStepExecutionReport) {
     taskStepExecutionReport = computeSeconds(taskStepExecutionReport);
-    return taskStepExecutionReportRepository.save(taskStepExecutionReport);
+    taskStepExecutionReport = taskStepExecutionReportRepository.save(taskStepExecutionReport);
+    log.info(
+        "Saved taskStepExecutionReport with taskExecutionId [{}] - id [{}]",
+        taskStepExecutionReport.getTaskExecutionId(),
+        taskStepExecutionReport.getId());
+    return taskStepExecutionReport;
   }
 
   public void delete(Integer id) throws TaskStepExecutionReportNotFoundException {
     TaskStepExecutionReport taskStepExecutionReport = getById(id);
     taskStepExecutionReportRepository.delete(taskStepExecutionReport);
+    log.info("Deleted taskStepExecutionReport for id [{}]", id);
   }
 
   private List<TaskStepExecutionReport> getByTaskExecutionReports(
       List<TaskExecutionReport> taskExecutionReportList) {
+    log.info(
+        "Creating list of taskStepExecutionReports related to [{}] taskExecutionReports",
+        taskExecutionReportList.size());
     List<TaskStepExecutionReport> taskStepExecutionReportList = new ArrayList<>();
     for (TaskExecutionReport taskExecutionReport : taskExecutionReportList) {
       taskStepExecutionReportList.addAll(
           taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionReport.getId()));
     }
+    log.info(
+        "Returning list of [{}] taskStepExecutionReports related to [{}] taskExecutionReports",
+        taskStepExecutionReportList.size(),
+        taskExecutionReportList.size());
     return taskStepExecutionReportList;
   }
 
   public TaskStepExecutionReport computeSeconds(TaskStepExecutionReport taskStepExecutionReport) {
+    log.info(
+        "Computing executionTimeSeconds for taskStepExecutionReport with taskExecutionId [{}]",
+        taskStepExecutionReport.getTaskExecutionId());
     if (taskStepExecutionReport.getEndDateTime() != null
         && taskStepExecutionReport.getStartDateTime() != null) {
       long difference =
           taskStepExecutionReport.getEndDateTime().getTime()
               - taskStepExecutionReport.getStartDateTime().getTime();
-      taskStepExecutionReport.setExecutionTimeSeconds(Math.round(difference / 1000));
+      int computedSeconds = Math.round(difference / 1000);
+      log.info(
+          "Computed executionTimeSeconds as [{}] for taskExecutionReport with taskExecutionId [{}]",
+          computedSeconds,
+          taskStepExecutionReport.getTaskExecutionId());
+      taskStepExecutionReport.setExecutionTimeSeconds(computedSeconds);
     }
     return taskStepExecutionReport;
   }
 
   public List<TaskStepExecutionReport> getMissingExecutionTime() {
-    return taskStepExecutionReportRepository
-        .findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
+    List<TaskStepExecutionReport> taskStepExecutionReportList =
+        taskStepExecutionReportRepository
+            .findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
+    log.info(
+        "Found [{}] taskStepExecutionReport with non-null startDateTime, non-null endDateTime, null executionTimeSeconds",
+        taskStepExecutionReportList.size());
+    return taskStepExecutionReportList;
   }
 }
