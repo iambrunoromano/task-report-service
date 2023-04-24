@@ -5,7 +5,6 @@ import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.TaskStepExecutionReportBadRequestException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
-import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.response.TaskExecutionReportResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,5 +94,21 @@ class TaskExecutionReportControllerTest extends TestUtility {
         taskExecutionReportController.getAllOrderByExecutionTime();
     assertEquals(buildGetAllOrderByExecutionTime(), actualResponse.getBody());
     assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
+
+  @Test
+  @Sql("classpath:task/get_all_order_by_execution_time_task_step_not_found.sql")
+  void getAllOrderByExecutionTimeTaskStepNotFoundTest() {
+    TaskStepExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskStepExecutionReportNotFoundException.class,
+            () -> {
+              taskExecutionReportController.getAllOrderByExecutionTime();
+            });
+    assertEquals(
+        String.format(
+            "TaskStepExecutionReport for taskExecutionReportList with ids [%s] not found",
+            Collections.singletonList(FOURTH_ID)),
+        actualException.getMessage());
   }
 }
