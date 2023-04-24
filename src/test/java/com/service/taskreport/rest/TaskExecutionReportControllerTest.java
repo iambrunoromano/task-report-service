@@ -136,4 +136,20 @@ class TaskExecutionReportControllerTest extends TestUtility {
         String.format("TaskExecutionReport for id [%s] not found", FIFTH_ID),
         actualException.getMessage());
   }
+
+  @Test
+  @Sql("classpath:task/get_by_id_task_step_not_found.sql")
+  void getByIdTaskStepNotFoundTest() {
+    TaskStepExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskStepExecutionReportNotFoundException.class,
+            () -> {
+              taskExecutionReportController.getById(SIXTH_ID);
+            });
+    assertEquals(
+        String.format(
+            "TaskStepExecutionReport for taskExecutionReportList with ids [%s] not found",
+            SIXTH_ID),
+        actualException.getMessage());
+  }
 }
