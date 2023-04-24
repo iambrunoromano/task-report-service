@@ -87,4 +87,25 @@ class TaskStepExecutionReportControllerTest extends TestUtility {
         String.format("TaskExecutionReport for id [%s] not found", SEVENTH_ID),
         actualException.getMessage());
   }
+
+  @Test
+  @Sql("classpath:step/delete.sql")
+  void deleteTest() throws TaskStepExecutionReportNotFoundException {
+    ResponseEntity<Void> actualResponse = taskStepExecutionReportController.delete(EIGHTH_ID);
+    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
+
+  @Test
+  @Sql("classpath:step/delete_step_not_found.sql")
+  void deleteStepNotFoundTest() {
+    TaskStepExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskStepExecutionReportNotFoundException.class,
+            () -> {
+              taskStepExecutionReportController.delete(EIGHTH_ID);
+            });
+    assertEquals(
+        String.format("TaskStepExecutionReport for id [%s] not found", EIGHTH_ID),
+        actualException.getMessage());
+  }
 }
