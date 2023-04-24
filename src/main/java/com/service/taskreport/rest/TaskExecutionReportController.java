@@ -60,7 +60,7 @@ public class TaskExecutionReportController {
       @PathVariable StatusEnum status)
       throws TaskExecutionReportNotFoundException, TaskStepExecutionReportBadRequestException,
           TaskStepExecutionReportNotFoundException {
-    log.info("New [GET-BY-STATUS] request");
+    log.info("New [GET-BY-STATUS] request for status [{}]", status);
     List<TaskExecutionReport> taskExecutionReportList =
         taskExecutionReportService.getByStatus(status);
     List<TaskStepExecutionReport> taskStepExecutionReportList =
@@ -88,7 +88,7 @@ public class TaskExecutionReportController {
   @GetMapping(value = "/{id}")
   public ResponseEntity<TaskExecutionReportResponse> getById(@PathVariable Integer id)
       throws TaskExecutionReportNotFoundException, TaskStepExecutionReportNotFoundException {
-    log.info("New [GET-BY-ID] request");
+    log.info("New [GET-BY-ID] request for id [{}]", id);
     TaskExecutionReport taskExecutionReport = taskExecutionReportService.getById(id);
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         taskStepExecutionReportService.getByTaskExecutionId(id);
@@ -102,7 +102,8 @@ public class TaskExecutionReportController {
   public ResponseEntity<TaskExecutionReportResponse> create(
       @RequestBody @Valid TaskExecutionReportRequest taskExecutionReportRequest)
       throws UndefinedStatusException, TaskStepExecutionReportNotFoundException {
-    log.info("New [CREATE] request");
+    log.info(
+        "New [CREATE] request for taskExecutionReportRequest [{}]", taskExecutionReportRequest);
     TaskExecutionReport taskExecutionReport = mapToEntity(taskExecutionReportRequest);
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         mapListToEntity(taskExecutionReportRequest.getTaskStepExecutionReports());
@@ -119,7 +120,7 @@ public class TaskExecutionReportController {
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable Integer id)
       throws TaskExecutionReportNotFoundException {
-    log.info("New [CREATE] request");
+    log.info("New [DELETE] request for id [{}]", id);
     taskExecutionReportService.delete(id);
     taskStepExecutionReportService.deleteByTaskExecutionId(id);
     log.info("Returning 200 OK");
