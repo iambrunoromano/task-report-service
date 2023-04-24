@@ -1,0 +1,341 @@
+{
+	"info": {
+		"_postman_id": "3d36fe7f-12bd-41bc-8a5a-ddf8f2499646",
+		"name": "Task Report Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "[Task] Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Task] Create",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Task] Update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"id\": 1,\r\n        \"taskId\": 2,\r\n        \"taskStepExecutionReports\": [\r\n            {\r\n                \"id\": 1,\r\n                \"taskExecutionId\": 1,\r\n                \"stepName\": \"step_1\",\r\n                \"status\": \"SUCCESS\",\r\n                \"startDateTime\": \"2022-12-31T23:00:00.000+00:00\",\r\n                \"endDateTime\": \"2022-12-31T23:01:00.000+00:00\",\r\n                \"executionTimeSeconds\": 60,\r\n                \"errorMessage\": \"\"\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"taskExecutionId\": 1,\r\n                \"stepName\": \"step_2\",\r\n                \"status\": \"FAILURE\",\r\n                \"startDateTime\": \"2022-12-31T23:00:00.000+00:00\",\r\n                \"endDateTime\": \"2022-12-31T23:01:00.000+00:00\",\r\n                \"executionTimeSeconds\": 60,\r\n                \"errorMessage\": \"\"\r\n            }\r\n        ],\r\n        \"startDateTime\": \"2022-12-31T23:00:00.000+00:00\",\r\n        \"endDateTime\": \"2022-12-31T23:01:13.000+00:00\",\r\n        \"errorMessage\": \"\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Task] Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taskId\": 3,\r\n    \"taskStepExecutionReports\": [\r\n        {\r\n            \"taskExecutionId\": 3,\r\n            \"stepName\": \"step_1\",\r\n            \"status\": \"SUCCESS\",\r\n            \"startDateTime\": \"2022-12-31T23:00:00\",\r\n            \"endDateTime\": \"2022-12-31T23:00:59\",\r\n            \"executionTimeSeconds\": 59,\r\n            \"errorMessage\": \"\"\r\n        }\r\n    ],\r\n    \"startDateTime\": \"2022-12-31T23:00:00\",\r\n    \"errorMessage\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Task] Get By Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports/status/SUCCESS",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports",
+								"status",
+								"SUCCESS"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Task] Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Task] Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Task] Get All By Execution Time",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-execution-reports/execution-time",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-execution-reports",
+								"execution-time"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Step",
+			"item": [
+				{
+					"name": "[Step] Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-step-execution-reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-step-execution-reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Step] Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-step-execution-reports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-step-execution-reports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Step] Get By Task Execution Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-step-execution-reports/task-execution-id/1?columnName=id&direction=DESC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-step-execution-reports",
+								"task-execution-id",
+								"1"
+							],
+							"query": [
+								{
+									"key": "columnName",
+									"value": "id"
+								},
+								{
+									"key": "direction",
+									"value": "DESC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Step] Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taskExecutionId\": 1,\r\n    \"stepName\": \"step_4\",\r\n    \"status\": \"SUCCESS\",\r\n    \"startDateTime\": \"2022-12-31T23:00:01.000+00:00\",\r\n    \"endDateTime\": \"2022-12-31T23:01:00.000+00:00\",\r\n    \"executionTimeSeconds\": 60,\r\n    \"errorMessage\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/task-step-execution-reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-step-execution-reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Step] Update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1,\r\n    \"taskExecutionId\": 1,\r\n    \"stepName\": \"step_your_mother\",\r\n    \"status\": \"SUCCESS\",\r\n    \"startDateTime\": \"2022-12-31T23:00:01.000+00:00\",\r\n    \"endDateTime\": \"2022-12-31T23:01:00.000+00:00\",\r\n    \"executionTimeSeconds\": 60,\r\n    \"errorMessage\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/task-step-execution-reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-step-execution-reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Step] Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/task-step-execution-reports/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task-step-execution-reports",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
