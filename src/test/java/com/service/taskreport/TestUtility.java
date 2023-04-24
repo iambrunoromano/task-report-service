@@ -60,6 +60,8 @@ public class TestUtility {
 
   protected static final Integer EIGHTH_ID = 13;
 
+  protected static final String SECOND_STEP_NAME = "step_2";
+
   private static Timestamp getTimestamp(String input) {
     Timestamp timestamp = Timestamp.from(Instant.now());
     try {
@@ -259,5 +261,32 @@ public class TestUtility {
         actualTaskStepResponse.getExecutionTimeSeconds());
     assertEquals(
         expectedTaskStepResponse.getErrorMessage(), actualTaskStepResponse.getErrorMessage());
+  }
+
+  protected List<TaskStepExecutionReportResponse> buildGetByTaskExecutionIdResponses(Integer id) {
+    TaskStepExecutionReportResponse firstTaskStepExecutionReportResponse =
+        TaskStepExecutionReportResponse.builder()
+            .id(id + 1)
+            .taskExecutionId(id)
+            .stepName(SECOND_STEP_NAME)
+            .status(StatusEnum.SUCCESS)
+            .startDateTime(START_DATE_TIME)
+            .endDateTime(SECOND_END_DATE_TIME)
+            .executionTimeSeconds(SECOND_EXECUTION_TIME_SECONDS)
+            .errorMessage("")
+            .build();
+    TaskStepExecutionReportResponse secondTaskStepExecutionReportResponse =
+        TaskStepExecutionReportResponse.builder()
+            .id(id)
+            .taskExecutionId(id)
+            .stepName(FIRST_STEP_NAME)
+            .status(StatusEnum.SUCCESS)
+            .startDateTime(START_DATE_TIME)
+            .endDateTime(FIRST_END_DATE_TIME)
+            .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
+            .errorMessage("")
+            .build();
+    return Arrays.asList(
+        firstTaskStepExecutionReportResponse, secondTaskStepExecutionReportResponse);
   }
 }

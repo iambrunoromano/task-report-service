@@ -1,6 +1,7 @@
 package com.service.taskreport.rest;
 
 import com.service.taskreport.TestUtility;
+import com.service.taskreport.enums.TaskStepExecutionReportColumnNameEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
 import com.service.taskreport.response.TaskStepExecutionReportResponse;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -106,6 +108,35 @@ class TaskStepExecutionReportControllerTest extends TestUtility {
             });
     assertEquals(
         String.format("TaskStepExecutionReport for id [%s] not found", EIGHTH_ID),
+        actualException.getMessage());
+  }
+
+  @Test
+  @Sql("classpath:step/get_by_task_execution_id.sql")
+  void getByTaskExecutionIdTest() throws TaskStepExecutionReportNotFoundException {
+    ResponseEntity<List<TaskStepExecutionReportResponse>> actualResponse =
+        taskStepExecutionReportController.getByTaskExecutionId(
+            SECOND_ID,
+            Sort.Direction.ASC,
+            TaskStepExecutionReportColumnNameEnum.executionTimeSeconds);
+    assertEquals(buildGetByTaskExecutionIdResponses(SECOND_ID), actualResponse.getBody());
+    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
+
+  @Test
+  @Sql("classpath:step/get_by_task_execution_id_task_step_not_found.sql")
+  void getByTaskExecutionIdNotFoundTest() {
+    TaskStepExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskStepExecutionReportNotFoundException.class,
+            () -> {
+              taskStepExecutionReportController.getByTaskExecutionId(
+                  THIRD_ID,
+                  Sort.Direction.ASC,
+                  TaskStepExecutionReportColumnNameEnum.executionTimeSeconds);
+            });
+    assertEquals(
+        String.format("TaskStepExecutionReport for taskExecutionId [%s] not found", THIRD_ID),
         actualException.getMessage());
   }
 }
