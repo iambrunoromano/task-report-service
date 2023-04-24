@@ -210,7 +210,6 @@ public class TestUtility {
         .taskStepExecutionReports(Arrays.asList(taskStepExecutionReportRequest))
         .startDateTime(START_DATE_TIME)
         .endDateTime(FIRST_END_DATE_TIME)
-        .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
         .errorMessage("")
         .build();
   }
@@ -222,7 +221,6 @@ public class TestUtility {
         .status(StatusEnum.SUCCESS)
         .startDateTime(START_DATE_TIME)
         .endDateTime(FIRST_END_DATE_TIME)
-        .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
         .errorMessage("")
         .build();
   }

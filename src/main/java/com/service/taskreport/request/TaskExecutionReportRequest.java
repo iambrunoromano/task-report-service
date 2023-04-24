@@ -16,6 +16,5 @@ public class TaskExecutionReportRequest {
   @NotNull(message = "startDateTime should not be null")
   private Timestamp startDateTime;
   private Timestamp endDateTime;
-  private Integer executionTimeSeconds;
   private String errorMessage;
 }
