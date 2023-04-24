@@ -31,13 +31,11 @@ public class ExecutionTimeScheduler {
     log.info("Start scheduled computeMissingExecutionTime job");
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         taskStepExecutionReportService.getMissingExecutionTime();
-    log.info("Found [{}] taskStepExecutionReport to compute", taskStepExecutionReportList.size());
     for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
       taskStepExecutionReportService.save(taskStepExecutionReport);
     }
     List<TaskExecutionReport> taskExecutionReportList =
         taskExecutionReportService.getMissingExecutionTime();
-    log.info("Found [{}] taskExecutionReport to compute", taskExecutionReportList.size());
     for (TaskExecutionReport taskExecutionReport : taskExecutionReportList) {
       taskExecutionReportService.save(taskExecutionReport);
     }
