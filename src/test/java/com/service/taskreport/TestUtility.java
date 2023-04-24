@@ -3,6 +3,8 @@ package com.service.taskreport;
 import com.service.taskreport.entity.TaskExecutionReport;
 import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.enums.StatusEnum;
+import com.service.taskreport.request.TaskExecutionReportRequest;
+import com.service.taskreport.request.TaskStepExecutionReportRequest;
 import com.service.taskreport.response.TaskExecutionReportResponse;
 import com.service.taskreport.response.TaskStepExecutionReportResponse;
 
@@ -50,6 +52,9 @@ public class TestUtility {
   protected static final Integer FIFTH_TASK_ID = 9;
 
   protected static final Integer SIXTH_ID = 11;
+
+  protected static final Integer SEVENTH_ID = 12;
+  protected static final Integer SEVENTH_TASK_ID = 12;
 
   private static Timestamp getTimestamp(String input) {
     Timestamp timestamp = Timestamp.from(Instant.now());
@@ -114,7 +119,7 @@ public class TestUtility {
 
   protected List<TaskExecutionReportResponse> buildGetAllOrderByExecutionTime() {
     TaskExecutionReportResponse firstTaskExecutionReportResponse =
-            buildSecondTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
+        buildSecondTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
     TaskExecutionReportResponse secondTaskExecutionReportResponse =
         buildFirstTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
     return Arrays.asList(firstTaskExecutionReportResponse, secondTaskExecutionReportResponse);
@@ -178,5 +183,26 @@ public class TestUtility {
             .errorMessage("")
             .build();
     return Arrays.asList(firstTaskStepExecutionReportResponse);
+  }
+
+  protected TaskExecutionReportRequest buildTaskExecutionReportRequest(Integer id, Integer taskId) {
+    TaskStepExecutionReportRequest taskStepExecutionReportRequest =
+        TaskStepExecutionReportRequest.builder()
+            .taskExecutionId(id)
+            .stepName(FIRST_STEP_NAME)
+            .status(StatusEnum.SUCCESS)
+            .startDateTime(START_DATE_TIME)
+            .endDateTime(FIRST_END_DATE_TIME)
+            .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
+            .errorMessage("")
+            .build();
+    return TaskExecutionReportRequest.builder()
+        .taskId(taskId)
+        .taskStepExecutionReports(Arrays.asList(taskStepExecutionReportRequest))
+        .startDateTime(START_DATE_TIME)
+        .endDateTime(FIRST_END_DATE_TIME)
+        .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
+        .errorMessage("")
+        .build();
   }
 }
