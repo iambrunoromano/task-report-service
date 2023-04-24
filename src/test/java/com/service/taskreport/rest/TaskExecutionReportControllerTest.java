@@ -22,8 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -180,6 +179,23 @@ class TaskExecutionReportControllerTest extends TestUtility {
             });
     assertEquals(
         String.format("Status for TaskExecutionReport with id [%s] is undefined", SEVENTH_ID),
+        actualException.getMessage());
+  }
+
+  @Test
+  @Sql("classpath:task/delete.sql")
+  void deleteTest()
+      throws TaskExecutionReportNotFoundException {
+    ResponseEntity<Void> deleteResponseEntity = taskExecutionReportController.delete(EIGHTH_ID);
+    assertEquals(HttpStatus.OK, deleteResponseEntity.getStatusCode());
+    TaskExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskExecutionReportNotFoundException.class,
+            () -> {
+              taskExecutionReportController.getById(EIGHTH_ID);
+            });
+    assertEquals(
+        String.format("TaskExecutionReport for id [%s] not found", EIGHTH_ID),
         actualException.getMessage());
   }
 }
