@@ -44,14 +44,13 @@ public class TaskExecutionReportService {
         String.format("TaskExecutionReport for id [%s] not found", id));
   }
 
-  public TaskExecutionReport save(
+  public TaskExecutionReport saveRequest(
       TaskExecutionReport taskExecutionReport,
       List<TaskStepExecutionReport> taskStepExecutionReportList)
       throws UndefinedStatusException {
     taskExecutionReport =
         setTaskExecutionReportStatus(taskExecutionReport, taskStepExecutionReportList);
-    taskExecutionReport = computeSeconds(taskExecutionReport);
-    taskExecutionReportRepository.save(taskExecutionReport);
+    save(taskExecutionReport);
     if (!taskStepExecutionReportList.isEmpty()) {
       for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
         taskStepExecutionReport.setTaskExecutionId(taskExecutionReport.getId());
@@ -61,6 +60,11 @@ public class TaskExecutionReportService {
       }
     }
     return taskExecutionReport;
+  }
+
+  public void save(TaskExecutionReport taskExecutionReport) {
+    taskExecutionReport = computeSeconds(taskExecutionReport);
+    taskExecutionReportRepository.save(taskExecutionReport);
   }
 
   public TaskExecutionReport computeSeconds(TaskExecutionReport taskExecutionReport) {
@@ -139,5 +143,10 @@ public class TaskExecutionReportService {
         String.format(
             "Status for TaskExecutionReport with taskId [%s] is undefined",
             taskExecutionReport.getTaskId()));
+  }
+
+  public List<TaskExecutionReport> getMissingExecutionTime() {
+    return taskExecutionReportRepository
+        .findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
   }
 }
