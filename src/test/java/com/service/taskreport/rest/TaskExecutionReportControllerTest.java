@@ -8,6 +8,7 @@ import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException
 import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.request.TaskExecutionReportRequest;
 import com.service.taskreport.response.TaskExecutionReportResponse;
+import com.service.taskreport.response.TaskStepExecutionReportResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,7 +23,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -157,9 +159,18 @@ class TaskExecutionReportControllerTest extends TestUtility {
     ResponseEntity<TaskExecutionReportResponse> actualResponse =
         taskExecutionReportController.create(
             buildTaskExecutionReportRequest(SEVENTH_ID, SEVENTH_TASK_ID));
-    assertEquals(
-        buildFirstTaskExecutionReportResponse(SEVENTH_ID, SEVENTH_TASK_ID),
-        actualResponse.getBody());
+    TaskExecutionReportResponse expectedTaskExecutionReportResponse =
+        buildFirstTaskExecutionReportResponse(SEVENTH_ID, SEVENTH_TASK_ID);
+    expectedTaskExecutionReportResponse.setStatus(StatusEnum.SUCCESS);
+    List<TaskStepExecutionReportResponse> expectedTaskStepExecutionReportResponseList =
+        expectedTaskExecutionReportResponse.getTaskStepExecutionReports();
+    for (TaskStepExecutionReportResponse taskStepExecutionReportResponse :
+        expectedTaskStepExecutionReportResponseList) {
+      taskStepExecutionReportResponse.setTaskExecutionId(actualResponse.getBody().getId());
+    }
+    expectedTaskExecutionReportResponse.setTaskStepExecutionReports(
+        expectedTaskStepExecutionReportResponseList);
+    assertTaskCreateTestEquals(expectedTaskExecutionReportResponse, actualResponse.getBody());
     assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
   }
 

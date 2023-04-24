@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TestUtility {
 
   protected static final SimpleDateFormat simpleDateFormat =
@@ -206,5 +208,41 @@ public class TestUtility {
         .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
         .errorMessage("")
         .build();
+  }
+
+  protected static void assertTaskCreateTestEquals(
+      TaskExecutionReportResponse expectedTaskResponse,
+      TaskExecutionReportResponse actualTaskResponse) {
+    assertEquals(expectedTaskResponse.getTaskId(), actualTaskResponse.getTaskId());
+    assertEquals(expectedTaskResponse.getStartDateTime(), actualTaskResponse.getStartDateTime());
+    assertEquals(expectedTaskResponse.getEndDateTime(), actualTaskResponse.getEndDateTime());
+    assertEquals(
+        expectedTaskResponse.getExecutionTimeSeconds(),
+        actualTaskResponse.getExecutionTimeSeconds());
+    assertEquals(expectedTaskResponse.getErrorMessage(), actualTaskResponse.getErrorMessage());
+    assertEquals(expectedTaskResponse.getStatus(), actualTaskResponse.getStatus());
+    for (Integer i = 0; i < actualTaskResponse.getTaskStepExecutionReports().size(); ++i) {
+      assertTaskStepCreateTestEquals(
+          expectedTaskResponse.getTaskStepExecutionReports().get(i),
+          actualTaskResponse.getTaskStepExecutionReports().get(i));
+    }
+  }
+
+  protected static void assertTaskStepCreateTestEquals(
+      TaskStepExecutionReportResponse expectedTaskStepResponse,
+      TaskStepExecutionReportResponse actualTaskStepResponse) {
+    assertEquals(
+        expectedTaskStepResponse.getTaskExecutionId(), actualTaskStepResponse.getTaskExecutionId());
+    assertEquals(expectedTaskStepResponse.getStepName(), actualTaskStepResponse.getStepName());
+    assertEquals(expectedTaskStepResponse.getStatus(), actualTaskStepResponse.getStatus());
+    assertEquals(
+        expectedTaskStepResponse.getStartDateTime(), actualTaskStepResponse.getStartDateTime());
+    assertEquals(
+        expectedTaskStepResponse.getEndDateTime(), actualTaskStepResponse.getEndDateTime());
+    assertEquals(
+        expectedTaskStepResponse.getExecutionTimeSeconds(),
+        actualTaskStepResponse.getExecutionTimeSeconds());
+    assertEquals(
+        expectedTaskStepResponse.getErrorMessage(), actualTaskStepResponse.getErrorMessage());
   }
 }
