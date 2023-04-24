@@ -96,7 +96,7 @@ public class TaskExecutionReportController {
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         mapListToEntity(taskExecutionReportRequest.getTaskStepExecutionReports());
     taskExecutionReport =
-        taskExecutionReportService.save(taskExecutionReport, taskStepExecutionReportList);
+        taskExecutionReportService.saveRequest(taskExecutionReport, taskStepExecutionReportList);
     taskStepExecutionReportList =
         taskStepExecutionReportService.getByTaskExecutionId(taskExecutionReport.getId());
     TaskExecutionReportResponse taskExecutionReportResponse =
