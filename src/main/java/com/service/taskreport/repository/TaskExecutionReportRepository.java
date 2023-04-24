@@ -14,4 +14,5 @@ public interface TaskExecutionReportRepository extends JpaRepository<TaskExecuti
 
   List<TaskExecutionReport> findByStatus(StatusEnum status);
   List<TaskExecutionReport> findAllByOrderByExecutionTimeSecondsAsc();
+  List<TaskExecutionReport> findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
 }

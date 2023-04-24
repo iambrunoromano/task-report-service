@@ -16,4 +16,7 @@ public interface TaskStepExecutionReportRepository
   List<TaskStepExecutionReport> findByTaskExecutionId(Integer taskExecutionId, Sort sort);
 
   List<TaskStepExecutionReport> findByTaskExecutionId(Integer taskExecutionId);
+
+  List<TaskStepExecutionReport>
+      findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
 }
