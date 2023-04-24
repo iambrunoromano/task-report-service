@@ -10,6 +10,7 @@ import com.service.taskreport.request.TaskStepExecutionReportRequest;
 import com.service.taskreport.response.TaskStepExecutionReportResponse;
 import com.service.taskreport.service.TaskExecutionReportService;
 import com.service.taskreport.service.TaskStepExecutionReportService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +59,7 @@ public class TaskStepExecutionReportController {
 
   @PostMapping
   public ResponseEntity<TaskStepExecutionReportResponse> create(
-      @RequestBody TaskStepExecutionReportRequest taskStepExecutionReportRequest)
+      @RequestBody @Valid TaskStepExecutionReportRequest taskStepExecutionReportRequest)
       throws TaskExecutionReportNotFoundException {
     taskExecutionReportService.getById(taskStepExecutionReportRequest.getTaskExecutionId());
     TaskStepExecutionReport taskStepExecutionReport = mapToEntity(taskStepExecutionReportRequest);
