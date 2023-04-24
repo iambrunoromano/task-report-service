@@ -29,7 +29,6 @@ class TaskExecutionReportServiceTest extends TestUtility {
   private final TaskExecutionReportService taskExecutionReportService =
       new TaskExecutionReportService(
           taskExecutionReportRepository,
-          taskStepExecutionReportRepository,
           taskStepExecutionReportService);
 
   @Test
