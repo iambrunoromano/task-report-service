@@ -52,7 +52,7 @@ public class TaskStepExecutionReportController {
     return ResponseEntity.ok(taskStepExecutionReportResponseList);
   }
 
-  @GetMapping(value = "/id/{id}")
+  @GetMapping(value = "/{id}")
   public ResponseEntity<TaskStepExecutionReportResponse> getById(@PathVariable Integer id)
       throws TaskStepExecutionReportNotFoundException {
     log.info("New [GET-BY-ID] request for id [{}]", id);
