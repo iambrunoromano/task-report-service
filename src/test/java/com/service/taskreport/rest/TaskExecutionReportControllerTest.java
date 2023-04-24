@@ -147,9 +147,7 @@ class TaskExecutionReportControllerTest extends TestUtility {
               taskExecutionReportController.getById(SIXTH_ID);
             });
     assertEquals(
-        String.format(
-            "TaskStepExecutionReport for taskExecutionReportList with ids [%s] not found",
-            SIXTH_ID),
+        String.format("TaskStepExecutionReport for taskExecutionId [%s] not found", SIXTH_ID),
         actualException.getMessage());
   }
 
@@ -178,14 +176,14 @@ class TaskExecutionReportControllerTest extends TestUtility {
               taskExecutionReportController.create(taskExecutionReportRequest);
             });
     assertEquals(
-        String.format("Status for TaskExecutionReport with taskId [%s] is undefined", SEVENTH_TASK_ID),
+        String.format(
+            "Status for TaskExecutionReport with taskId [%s] is undefined", SEVENTH_TASK_ID),
         actualException.getMessage());
   }
 
   @Test
   @Sql("classpath:task/delete.sql")
-  void deleteTest()
-      throws TaskExecutionReportNotFoundException {
+  void deleteTest() throws TaskExecutionReportNotFoundException {
     ResponseEntity<Void> deleteResponseEntity = taskExecutionReportController.delete(EIGHTH_ID);
     assertEquals(HttpStatus.OK, deleteResponseEntity.getStatusCode());
     TaskExecutionReportNotFoundException actualException =
