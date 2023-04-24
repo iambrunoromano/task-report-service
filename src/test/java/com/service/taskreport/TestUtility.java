@@ -202,18 +202,22 @@ public class TestUtility {
 
   protected TaskExecutionReportRequest buildTaskExecutionReportRequest(Integer id, Integer taskId) {
     TaskStepExecutionReportRequest taskStepExecutionReportRequest =
-        TaskStepExecutionReportRequest.builder()
-            .taskExecutionId(id)
-            .stepName(FIRST_STEP_NAME)
-            .status(StatusEnum.SUCCESS)
-            .startDateTime(START_DATE_TIME)
-            .endDateTime(FIRST_END_DATE_TIME)
-            .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
-            .errorMessage("")
-            .build();
+        buildTaskStepExecutionReportRequest(id);
     return TaskExecutionReportRequest.builder()
         .taskId(taskId)
         .taskStepExecutionReports(Arrays.asList(taskStepExecutionReportRequest))
+        .startDateTime(START_DATE_TIME)
+        .endDateTime(FIRST_END_DATE_TIME)
+        .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)
+        .errorMessage("")
+        .build();
+  }
+
+  protected TaskStepExecutionReportRequest buildTaskStepExecutionReportRequest(Integer id) {
+    return TaskStepExecutionReportRequest.builder()
+        .taskExecutionId(id)
+        .stepName(FIRST_STEP_NAME)
+        .status(StatusEnum.SUCCESS)
         .startDateTime(START_DATE_TIME)
         .endDateTime(FIRST_END_DATE_TIME)
         .executionTimeSeconds(FIRST_EXECUTION_TIME_SECONDS)

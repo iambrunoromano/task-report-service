@@ -1,8 +1,8 @@
 package com.service.taskreport.rest;
 
 import com.service.taskreport.TestUtility;
+import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
-import com.service.taskreport.response.TaskExecutionReportResponse;
 import com.service.taskreport.response.TaskStepExecutionReportResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -60,6 +60,31 @@ class TaskStepExecutionReportControllerTest extends TestUtility {
             });
     assertEquals(
         String.format("TaskStepExecutionReport for id [%s] not found", SIXTH_ID),
+        actualException.getMessage());
+  }
+
+  @Test
+  @Sql("classpath:step/create.sql")
+  void createTest() throws TaskExecutionReportNotFoundException {
+    ResponseEntity<TaskStepExecutionReportResponse> actualResponse =
+        taskStepExecutionReportController.create(buildTaskStepExecutionReportRequest(FOURTH_ID));
+    assertTaskStepCreateTestEquals(
+        buildFirstTaskStepResponses(FOURTH_ID).get(0), actualResponse.getBody());
+    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+  }
+
+  @Test
+  @Sql("classpath:step/create_task_not_found.sql")
+  void createTaskNotFoundTest() {
+    TaskExecutionReportNotFoundException actualException =
+        assertThrows(
+            TaskExecutionReportNotFoundException.class,
+            () -> {
+              taskStepExecutionReportController.create(
+                  buildTaskStepExecutionReportRequest(SEVENTH_ID));
+            });
+    assertEquals(
+        String.format("TaskExecutionReport for id [%s] not found", SEVENTH_ID),
         actualException.getMessage());
   }
 }
