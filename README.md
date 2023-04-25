@@ -4,6 +4,8 @@ A simple task-reporting service to keep track of generic backend tasks metrics
 
 # API documentation
 
+The swagger is available at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html).
+
 Two resources are available tot the API consumer:
 
 1. `/task-execution-reports` to operate on the `taskExecutionReports`
