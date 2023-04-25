@@ -27,9 +27,7 @@ class TaskExecutionReportServiceTest extends TestUtility {
   private final TaskStepExecutionReportService taskStepExecutionReportService =
       Mockito.mock(TaskStepExecutionReportService.class);
   private final TaskExecutionReportService taskExecutionReportService =
-      new TaskExecutionReportService(
-          taskExecutionReportRepository,
-          taskStepExecutionReportService);
+      new TaskExecutionReportService(taskExecutionReportRepository, taskStepExecutionReportService);
 
   @Test
   void getAllTest() {
@@ -84,13 +82,16 @@ class TaskExecutionReportServiceTest extends TestUtility {
               doTransferStatusTest(StatusEnum.SUCCESS, false, false, false);
             });
     assertEquals(
-        String.format("Status for TaskExecutionReport with taskId [%s] is undefined", FIRST_TASK_ID),
+        String.format(
+            "Status for TaskExecutionReport with taskId [%s] is undefined", FIRST_TASK_ID),
         actualException.getMessage());
   }
 
   @Test
   void getAllOrderByExecutionTimeSecondsTest() {
-    BDDMockito.given(taskExecutionReportRepository.findAllByOrderByExecutionTimeSecondsAsc())
+    BDDMockito.given(
+            taskExecutionReportRepository
+                .findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc())
         .willReturn(buildTaskExecutionReportList());
     assertEquals(
         buildTaskExecutionReportList(),
@@ -149,7 +150,8 @@ class TaskExecutionReportServiceTest extends TestUtility {
                   buildTaskExecutionReport(), new ArrayList<>());
             });
     assertEquals(
-        String.format("Status for TaskExecutionReport with taskId [%s] is undefined", FIRST_TASK_ID),
+        String.format(
+            "Status for TaskExecutionReport with taskId [%s] is undefined", FIRST_TASK_ID),
         actualException.getMessage());
   }
 

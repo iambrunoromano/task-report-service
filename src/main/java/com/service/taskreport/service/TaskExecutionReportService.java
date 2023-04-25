@@ -141,7 +141,7 @@ public class TaskExecutionReportService {
   }
 
   public List<TaskExecutionReport> getAllOrderByExecutionTimeSeconds() {
-    return taskExecutionReportRepository.findAllByOrderByExecutionTimeSecondsAsc();
+    return taskExecutionReportRepository.findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc();
   }
 
   public TaskExecutionReport transferStatus(

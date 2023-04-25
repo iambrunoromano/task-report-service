@@ -136,9 +136,9 @@ public class TestUtility {
 
   protected List<TaskExecutionReportResponse> buildGetAllOrderByExecutionTime() {
     TaskExecutionReportResponse firstTaskExecutionReportResponse =
-        buildSecondTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
-    TaskExecutionReportResponse secondTaskExecutionReportResponse =
         buildFirstTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
+    TaskExecutionReportResponse secondTaskExecutionReportResponse =
+        buildSecondTaskExecutionReportResponse(THIRD_ID, FOURTH_TASK_ID);
     return Arrays.asList(firstTaskExecutionReportResponse, secondTaskExecutionReportResponse);
   }
 
