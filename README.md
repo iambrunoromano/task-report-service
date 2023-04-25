@@ -131,13 +131,13 @@ the following allowed:
 ```
 
 ### delete
-`DELETE``/task-step-execution-reports/{id}`
+`DELETE` `/task-step-execution-reports/{id}`
 
 The method deletes the `taskStepExecutionReport` present on the persistence layer respectively with taskExecutionId
 equal to the path variable value `id`
 
 ### getByTaskExecutionId
-`GET``/task-step-execution-reports/task-execution-id/{task_execution_id}`
+`GET` `/task-step-execution-reports/task-execution-id/{task_execution_id}`
 
 The method returns the `taskStepExecutionReports` present on the persistence layer with taskExecutionId equal to the
 path variable value `task_execution_id`. It is possible to sort the resulting list accordingly to the following request
