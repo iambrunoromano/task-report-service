@@ -29,26 +29,6 @@
 					"response": []
 				},
 				{
-					"name": "[Task] Create",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/task-execution-reports/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"task-execution-reports",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "[Task] Update",
 					"request": {
 						"method": "POST",
@@ -83,7 +63,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"taskId\": 3,\r\n    \"taskStepExecutionReports\": [\r\n        {\r\n            \"taskExecutionId\": 3,\r\n            \"stepName\": \"step_1\",\r\n            \"status\": \"SUCCESS\",\r\n            \"startDateTime\": \"2022-12-31T23:00:00\",\r\n            \"endDateTime\": \"2022-12-31T23:00:59\",\r\n            \"executionTimeSeconds\": 59,\r\n            \"errorMessage\": \"\"\r\n        }\r\n    ],\r\n    \"startDateTime\": \"2022-12-31T23:00:00\",\r\n    \"errorMessage\": \"\"\r\n}",
+							"raw": "{\r\n    \"taskId\": 3,\r\n    \"taskStepExecutionReports\": [\r\n        {\r\n            \"taskExecutionId\": 3,\r\n            \"stepName\": \"step_1\",\r\n            \"status\": \"FAILURE\",\r\n            \"startDateTime\": \"2022-12-31T23:00:00\",\r\n            \"endDateTime\": \"2022-12-31T23:00:59\",\r\n            \"executionTimeSeconds\": 59,\r\n            \"errorMessage\": \"\"\r\n        }\r\n    ],\r\n    \"startDateTime\": \"2022-12-31T23:00:00\",\r\n    \"endDateTime\": \"2022-12-31T23:02:00\",\r\n    \"errorMessage\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -110,7 +90,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/task-execution-reports/status/SUCCESS",
+							"raw": "http://localhost:8080/task-execution-reports/status/FAILURE",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -119,7 +99,7 @@
 							"path": [
 								"task-execution-reports",
 								"status",
-								"SUCCESS"
+								"FAILURE"
 							]
 						}
 					},
@@ -214,7 +194,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/task-step-execution-reports/1",
+							"raw": "http://localhost:8080/task-step-execution-reports/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -222,7 +202,7 @@
 							"port": "8080",
 							"path": [
 								"task-step-execution-reports",
-								"1"
+								"3"
 							]
 						}
 					},
@@ -266,7 +246,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"taskExecutionId\": 1,\r\n    \"stepName\": \"step_4\",\r\n    \"status\": \"SUCCESS\",\r\n    \"startDateTime\": \"2022-12-31T23:00:01.000+00:00\",\r\n    \"endDateTime\": \"2022-12-31T23:01:00.000+00:00\",\r\n    \"executionTimeSeconds\": 60,\r\n    \"errorMessage\": \"\"\r\n}",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"taskExecutionId\": 1,\r\n    \"stepName\": \"step_4\",\r\n    \"status\": \"SUCCESS\",\r\n    \"startDateTime\": \"2022-12-31T23:00:01.000+00:00\",\r\n    \"endDateTime\": \"2022-12-31T23:01:01.000+00:00\",\r\n    \"errorMessage\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -294,7 +274,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":1,\r\n    \"taskExecutionId\": 1,\r\n    \"stepName\": \"step_your_mother\",\r\n    \"status\": \"SUCCESS\",\r\n    \"startDateTime\": \"2022-12-31T23:00:01.000+00:00\",\r\n    \"endDateTime\": \"2022-12-31T23:01:00.000+00:00\",\r\n    \"executionTimeSeconds\": 60,\r\n    \"errorMessage\": \"\"\r\n}",
+							"raw": "{\r\n    \"id\":4,\r\n    \"taskExecutionId\": 1,\r\n    \"stepName\": \"step_your_mother\",\r\n    \"status\": \"SUCCESS\",\r\n    \"startDateTime\": \"2022-12-31T23:00:01.000+00:00\",\r\n    \"endDateTime\": \"2022-12-31T23:01:00.000+00:00\",\r\n    \"errorMessage\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
