@@ -13,26 +13,31 @@ The swagger is available at [http://localhost:8080/swagger-ui/index.html](http:/
 
 ## /task-execution-reports
 
-### `GET` getAll
+### getAll
+`GET` `/task-execution-reports`
 
 The method returns all the `taskExecutionReports` present on the persistence layer
 
-### `GET` getAllByStatus `/status/{status}`
+### getAllByStatus
+`GET` `/task-execution-reports/status/{status}`
 
 The method returns all the `taskExecutionReports` with status equal to the path variable value `status` present on the
 persistence layer
 
-### `GET` getAllOrderByExecutionTime `/execution-time`
+### getAllOrderByExecutionTime
+`GET` `/task-execution-reports/execution-time`
 
 The method returns all the `taskExecutionReports` present on the persistence layer ordered by
 ascending `executionTimeSeconds`
 
-### `GET` getById `/{id}`
+### getById
+`GET` `/task-execution-reports/{id}`
 
 The method returns the `taskExecutionReport` present on the persistence layer with id equal to the path variable
 value `id`
 
-### `POST` create
+### create
+`POST` `/task-execution-reports`
 
 The method allows the creation and the update of the `taskExecutionReport` following the request json model:
 
@@ -75,23 +80,27 @@ the following allowed:
 }
 ```
 
-### `DELETE` delete `/{id}`
+### delete
+`DELETE` `/task-execution-reports/{id}`
 
 The method deletes the `taskExecutionReport` and all the associated `taskStepExecutionReports` present on the
 persistence layer respectively with id and taskExecutionId equal to the path variable value `id`
 
 ## /task-step-execution-reports
 
-### `GET` getAll
+### getAll
+`GET` `/task-step-execution-reports`
 
 The method returns all the `taskStepExecutionReports` present on the persistence layer
 
-### `GET` getById `/{id}`
+### getById
+`GET` `/task-step-execution-reports/{id}`
 
 The method returns the `taskStepExecutionReport` present on the persistence layer with id equal to the path variable
 value `id`
 
-### `POST` create
+### create
+`POST` `/task-step-execution-reports`
 
 The method allows the creation and the update of the `taskStepExecutionReport` following the request json model:
 
@@ -121,12 +130,14 @@ the following allowed:
 }
 ```
 
-### `DELETE` delete `/{id}`
+### delete
+`DELETE``/task-step-execution-reports/{id}`
 
 The method deletes the `taskStepExecutionReport` present on the persistence layer respectively with taskExecutionId
 equal to the path variable value `id`
 
-### `GET` getByTaskExecutionId `/task-execution-id/{task_execution_id}`
+### getByTaskExecutionId
+`GET``/task-step-execution-reports/task-execution-id/{task_execution_id}`
 
 The method returns the `taskStepExecutionReports` present on the persistence layer with taskExecutionId equal to the
 path variable value `task_execution_id`. It is possible to sort the resulting list accordingly to the following request
