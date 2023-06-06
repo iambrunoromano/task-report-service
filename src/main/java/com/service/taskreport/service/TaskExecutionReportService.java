@@ -5,6 +5,7 @@ import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
+import com.service.taskreport.mapper.persistence.TaskExecutionReportPersistenceMapper;
 import com.service.taskreport.repository.TaskExecutionReportRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,16 @@ import java.util.Optional;
 public class TaskExecutionReportService {
 
   private final TaskExecutionReportRepository taskExecutionReportRepository;
+  private final TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper;
   private final TaskStepExecutionReportService taskStepExecutionReportService;
 
   @Autowired
   TaskExecutionReportService(
       TaskExecutionReportRepository taskExecutionReportRepository,
+      TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper,
       TaskStepExecutionReportService taskStepExecutionReportService) {
     this.taskExecutionReportRepository = taskExecutionReportRepository;
+    this.taskExecutionReportPersistenceMapper = taskExecutionReportPersistenceMapper;
     this.taskStepExecutionReportService = taskStepExecutionReportService;
   }
 
@@ -36,7 +40,7 @@ public class TaskExecutionReportService {
 
   public TaskExecutionReport getById(Integer id) throws TaskExecutionReportNotFoundException {
     Optional<TaskExecutionReport> optionalTaskExecutionReport =
-        taskExecutionReportRepository.findById(id);
+        taskExecutionReportPersistenceMapper.findById(id);
     if (optionalTaskExecutionReport.isPresent()) {
       TaskExecutionReport taskExecutionReport = optionalTaskExecutionReport.get();
       log.info("Found one taskExecutionReport for id [{}]: [{}]", id, taskExecutionReport);
@@ -130,7 +134,7 @@ public class TaskExecutionReportService {
   public List<TaskExecutionReport> getByStatus(StatusEnum status)
       throws TaskExecutionReportNotFoundException {
     List<TaskExecutionReport> taskExecutionReportList =
-        taskExecutionReportRepository.findByStatus(status);
+        taskExecutionReportPersistenceMapper.findByStatus(status);
     log.info(
         "Found [{}] taskExecutionReports for status [{}]", taskExecutionReportList.size(), status);
     if (taskExecutionReportList.isEmpty()) {
@@ -141,7 +145,8 @@ public class TaskExecutionReportService {
   }
 
   public List<TaskExecutionReport> getAllOrderByExecutionTimeSeconds() {
-    return taskExecutionReportRepository.findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc();
+    return taskExecutionReportPersistenceMapper
+        .findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc();
   }
 
   public TaskExecutionReport transferStatus(
@@ -175,7 +180,7 @@ public class TaskExecutionReportService {
 
   public List<TaskExecutionReport> getMissingExecutionTime() {
     List<TaskExecutionReport> taskExecutionReportList =
-        taskExecutionReportRepository
+        taskExecutionReportPersistenceMapper
             .findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
     log.info(
         "Found [{}] taskExecutionReport with non-null startDateTime, non-null endDateTime, null executionTimeSeconds",
