@@ -6,6 +6,7 @@ import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
+import com.service.taskreport.mapper.persistence.TaskExecutionReportPersistenceMapper;
 import com.service.taskreport.repository.TaskExecutionReportRepository;
 import com.service.taskreport.repository.TaskStepExecutionReportRepository;
 import org.junit.jupiter.api.Test;
@@ -20,14 +21,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TaskExecutionReportServiceTest extends TestUtility {
+
+  // TODO: remove repositories and integrate query based save methods
+
   private final TaskExecutionReportRepository taskExecutionReportRepository =
       Mockito.mock(TaskExecutionReportRepository.class);
+  private final TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper =
+      Mockito.mock(TaskExecutionReportPersistenceMapper.class);
   private final TaskStepExecutionReportRepository taskStepExecutionReportRepository =
       Mockito.mock(TaskStepExecutionReportRepository.class);
   private final TaskStepExecutionReportService taskStepExecutionReportService =
       Mockito.mock(TaskStepExecutionReportService.class);
   private final TaskExecutionReportService taskExecutionReportService =
-      new TaskExecutionReportService(taskExecutionReportRepository, taskStepExecutionReportService);
+      new TaskExecutionReportService(
+          taskExecutionReportRepository,
+          taskExecutionReportPersistenceMapper,
+          taskStepExecutionReportService);
 
   @Test
   void getAllTest() {
@@ -38,14 +47,14 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   @Test
   void getByIdFoundTest() throws TaskExecutionReportNotFoundException {
-    BDDMockito.given(taskExecutionReportRepository.findById(Mockito.anyInt()))
+    BDDMockito.given(taskExecutionReportPersistenceMapper.findById(Mockito.anyInt()))
         .willReturn(Optional.of(buildTaskExecutionReport()));
     assertEquals(buildTaskExecutionReport(), taskExecutionReportService.getById(ID));
   }
 
   @Test
   void getByIdNotFoundTest() {
-    BDDMockito.given(taskExecutionReportRepository.findById(Mockito.anyInt()))
+    BDDMockito.given(taskExecutionReportPersistenceMapper.findById(Mockito.anyInt()))
         .willReturn(Optional.empty());
     TaskExecutionReportNotFoundException actualException =
         assertThrows(
@@ -90,7 +99,7 @@ class TaskExecutionReportServiceTest extends TestUtility {
   @Test
   void getAllOrderByExecutionTimeSecondsTest() {
     BDDMockito.given(
-            taskExecutionReportRepository
+            taskExecutionReportPersistenceMapper
                 .findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc())
         .willReturn(buildTaskExecutionReportList());
     assertEquals(
@@ -100,7 +109,8 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   @Test
   void getByStatusFoundTest() throws TaskExecutionReportNotFoundException {
-    BDDMockito.given(taskExecutionReportRepository.findByStatus(Mockito.any(StatusEnum.class)))
+    BDDMockito.given(
+            taskExecutionReportPersistenceMapper.findByStatus(Mockito.any(StatusEnum.class)))
         .willReturn(buildTaskExecutionReportList());
     assertEquals(
         buildTaskExecutionReportList(), taskExecutionReportService.getByStatus(StatusEnum.RUNNING));
@@ -108,7 +118,8 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   @Test
   void getByStatusNotFoundTest() {
-    BDDMockito.given(taskExecutionReportRepository.findByStatus(Mockito.any(StatusEnum.class)))
+    BDDMockito.given(
+            taskExecutionReportPersistenceMapper.findByStatus(Mockito.any(StatusEnum.class)))
         .willReturn(new ArrayList<>());
     TaskExecutionReportNotFoundException actualException =
         assertThrows(
@@ -157,7 +168,7 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   @Test
   void deleteNotFoundTest() {
-    BDDMockito.given(taskExecutionReportRepository.findById(Mockito.anyInt()))
+    BDDMockito.given(taskExecutionReportPersistenceMapper.findById(Mockito.anyInt()))
         .willReturn(Optional.empty());
     TaskExecutionReportNotFoundException actualException =
         assertThrows(
