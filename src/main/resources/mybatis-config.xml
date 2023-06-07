@@ -19,7 +19,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="com/service/taskreport/mapper/persistence/TaskExecutionReportPersistenceMapper.xml"/>
-        <mapper resource="com/service/taskreport/mapper/persistence/TaskStepExecutionReportPersistenceMapper.xml"/>
+        <mapper resource="TaskExecutionReportPersistenceMapper.xml"/>
     </mappers>
 </configuration>
