@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TaskExecutionReportServiceTest extends TestUtility {
 
-  // TODO: remove repositories and integrate query based save methods
-
   private final TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper =
       Mockito.mock(TaskExecutionReportPersistenceMapper.class);
   private final TaskStepExecutionReportRepository taskStepExecutionReportRepository =
