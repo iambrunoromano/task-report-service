@@ -1,5 +1,5 @@
 package com.service.taskreport.mapper.persistence;
 
 public class TaskStepExecutionReportPersistenceMapper {
-    // TODO: implement
+  // TODO: implement
 }
