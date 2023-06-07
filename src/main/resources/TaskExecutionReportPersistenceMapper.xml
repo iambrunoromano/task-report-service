@@ -5,16 +5,29 @@
 <mapper namespace="com.service.taskreport.mapper.persistence.TaskExecutionReportPersistenceMapper">
     <resultMap id="TaskExecutionReportResultMap" type="TaskExecutionReport">
         <id property="id" column="task_execution_id"/>
-        <id property="taskId" column = "task_id"/>
-        <id property="startDateTime" column = "start_date_time"/>
-        <id property="endDateTime" column = "end_date_time"/>
-        <id property="executionTimeSeconds" column = "execution_time_seconds"/>
-        <id property="errorMessage" column = "error_message"/>
-        <id property="status" column = "status"/>
-        <id property="insertDate" column = "insert_date"/>
-        <id property="updateDate" column = "update_date"/>
+        <id property="taskId" column="task_id"/>
+        <id property="startDateTime" column="start_date_time"/>
+        <id property="endDateTime" column="end_date_time"/>
+        <id property="executionTimeSeconds" column="execution_time_seconds"/>
+        <id property="errorMessage" column="error_message"/>
+        <id property="status" column="status"/>
+        <id property="insertDate" column="insert_date"/>
+        <id property="updateDate" column="update_date"/>
     </resultMap>
-    <select id="findById" resultType="TaskExecutionReport" resultMap="TaskExecutionReportResultMap">
+
+    <select id="findById" parameterType="int" resultType="TaskExecutionReport" resultMap="TaskExecutionReportResultMap">
         SELECT * FROM task_execution_report WHERE task_execution_id = #{id}
+    </select>
+
+    <select id="findByStatus" parameterType="string" resultType="TaskExecutionReport" resultMap="TaskExecutionReportResultMap">
+        SELECT * FROM task_execution_report WHERE status = #{status}
+    </select>
+
+    <select id="findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc" resultType="TaskExecutionReport" resultMap="TaskExecutionReportResultMap">
+        SELECT * FROM task_execution_report WHERE execution_time_seconds IS NOT NULL ORDER BY execution_time_seconds DESC
+    </select>
+
+    <select id="findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull" resultType="TaskExecutionReport" resultMap="TaskExecutionReportResultMap">
+        SELECT * FROM task_execution_report WHERE start_date_time IS NOT NULL AND end_date_time IS NOT NULL AND execution_time_seconds IS NULL
     </select>
 </mapper>
