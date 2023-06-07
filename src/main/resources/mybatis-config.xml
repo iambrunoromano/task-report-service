@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.service.taskreport.entity.TaskExecutionReport" alias="TaskExecutionReport"/>
+        <typeAlias type="com.service.taskreport.entity.TaskStepExecutionReport" alias="TaskStepExecutionReport"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:h2:mem:;DATABASE_TO_UPPER=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/service/taskreport/mapper/persistence/TaskExecutionReportPersistenceMapper.xml"/>
+        <mapper resource="com/service/taskreport/mapper/persistence/TaskStepExecutionReportPersistenceMapper.xml"/>
+    </mappers>
+</configuration>
