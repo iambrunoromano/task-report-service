@@ -22,7 +22,7 @@ public class TaskStepExecutionReport {
   public static final String TABLE_NAME = "task_step_execution_report";
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "task_step_execution_id")
   private Integer id;
 
