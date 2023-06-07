@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaskExecutionReportPersistenceMapper {
+  // TODO: implement delete & save methods
   @Select("SELECT * FROM task_execution_report WHERE task_execution_id = #{id}")
   @Results({
     @Result(property = "id", column = "task_execution_id"),
