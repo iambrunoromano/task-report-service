@@ -7,7 +7,6 @@ import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.mapper.persistence.TaskExecutionReportPersistenceMapper;
-import com.service.taskreport.repository.TaskExecutionReportRepository;
 import com.service.taskreport.repository.TaskStepExecutionReportRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -24,8 +23,6 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   // TODO: remove repositories and integrate query based save methods
 
-  private final TaskExecutionReportRepository taskExecutionReportRepository =
-      Mockito.mock(TaskExecutionReportRepository.class);
   private final TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper =
       Mockito.mock(TaskExecutionReportPersistenceMapper.class);
   private final TaskStepExecutionReportRepository taskStepExecutionReportRepository =
@@ -34,13 +31,11 @@ class TaskExecutionReportServiceTest extends TestUtility {
       Mockito.mock(TaskStepExecutionReportService.class);
   private final TaskExecutionReportService taskExecutionReportService =
       new TaskExecutionReportService(
-          taskExecutionReportRepository,
-          taskExecutionReportPersistenceMapper,
-          taskStepExecutionReportService);
+          taskExecutionReportPersistenceMapper, taskStepExecutionReportService);
 
   @Test
   void getAllTest() {
-    BDDMockito.given(taskExecutionReportRepository.findAll())
+    BDDMockito.given(taskExecutionReportPersistenceMapper.findAll())
         .willReturn(buildTaskExecutionReportList());
     assertEquals(buildTaskExecutionReportList(), taskExecutionReportService.getAll());
   }
@@ -183,8 +178,6 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   @Test
   void saveTest() throws UndefinedStatusException {
-    BDDMockito.given(taskExecutionReportRepository.save(Mockito.any()))
-        .willReturn(buildTaskExecutionReport());
     BDDMockito.given(taskStepExecutionReportRepository.save(Mockito.any()))
         .willReturn(buildTaskStepExecutionReport());
     assertEquals(

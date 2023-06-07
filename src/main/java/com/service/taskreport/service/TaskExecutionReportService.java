@@ -6,7 +6,6 @@ import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.mapper.persistence.TaskExecutionReportPersistenceMapper;
-import com.service.taskreport.repository.TaskExecutionReportRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,22 +17,20 @@ import java.util.Optional;
 @Slf4j
 public class TaskExecutionReportService {
 
-  private final TaskExecutionReportRepository taskExecutionReportRepository;
   private final TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper;
   private final TaskStepExecutionReportService taskStepExecutionReportService;
 
   @Autowired
   TaskExecutionReportService(
-      TaskExecutionReportRepository taskExecutionReportRepository,
       TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper,
       TaskStepExecutionReportService taskStepExecutionReportService) {
-    this.taskExecutionReportRepository = taskExecutionReportRepository;
     this.taskExecutionReportPersistenceMapper = taskExecutionReportPersistenceMapper;
     this.taskStepExecutionReportService = taskStepExecutionReportService;
   }
 
   public List<TaskExecutionReport> getAll() {
-    List<TaskExecutionReport> taskExecutionReportList = taskExecutionReportRepository.findAll();
+    List<TaskExecutionReport> taskExecutionReportList =
+        taskExecutionReportPersistenceMapper.findAll();
     log.info("Found [{}] taskExecutionReports", taskExecutionReportList.size());
     return taskExecutionReportList;
   }
@@ -71,7 +68,7 @@ public class TaskExecutionReportService {
 
   public void save(TaskExecutionReport taskExecutionReport) {
     taskExecutionReport = computeSeconds(taskExecutionReport);
-    taskExecutionReport = taskExecutionReportRepository.save(taskExecutionReport);
+    taskExecutionReportPersistenceMapper.insert(taskExecutionReport);
     log.info(
         "Saved taskExecutionReport with taskId [{}] - id [{}]",
         taskExecutionReport.getTaskId(),
@@ -98,9 +95,9 @@ public class TaskExecutionReportService {
   }
 
   public void delete(Integer id) throws TaskExecutionReportNotFoundException {
-    TaskExecutionReport taskExecutionReport = getById(id);
+    getById(id);
     taskStepExecutionReportService.deleteByTaskExecutionId(id);
-    taskExecutionReportRepository.delete(taskExecutionReport);
+    taskExecutionReportPersistenceMapper.delete(id);
   }
 
   public TaskExecutionReport setTaskExecutionReportStatus(
