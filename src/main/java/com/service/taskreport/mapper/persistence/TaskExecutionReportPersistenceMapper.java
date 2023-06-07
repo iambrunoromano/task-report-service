@@ -2,72 +2,91 @@ package com.service.taskreport.mapper.persistence;
 
 import com.service.taskreport.entity.TaskExecutionReport;
 import com.service.taskreport.enums.StatusEnum;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface TaskExecutionReportPersistenceMapper {
-  // TODO: implement delete & save methods
-  @Select("SELECT * FROM task_execution_report WHERE task_execution_id = #{id}")
-  @Results({
-    @Result(property = "id", column = "task_execution_id"),
-    @Result(property = "taskId", column = "task_id"),
-    @Result(property = "startDateTime", column = "start_date_time"),
-    @Result(property = "endDateTime", column = "end_date_time"),
-    @Result(property = "executionTimeSeconds", column = "execution_time_seconds"),
-    @Result(property = "errorMessage", column = "error_message"),
-    @Result(property = "status", column = "status"),
-    @Result(property = "insertDate", column = "insert_date"),
-    @Result(property = "updateDate", column = "update_date")
-  })
-  Optional<TaskExecutionReport> findById(@Param("id") Integer id);
+@Component
+public class TaskExecutionReportPersistenceMapper {
 
-  @Select("SELECT * FROM task_execution_report WHERE status = #{status}")
-  @Results({
-    @Result(property = "id", column = "task_execution_id"),
-    @Result(property = "taskId", column = "task_id"),
-    @Result(property = "startDateTime", column = "start_date_time"),
-    @Result(property = "endDateTime", column = "end_date_time"),
-    @Result(property = "executionTimeSeconds", column = "execution_time_seconds"),
-    @Result(property = "errorMessage", column = "error_message"),
-    @Result(property = "status", column = "status"),
-    @Result(property = "insertDate", column = "insert_date"),
-    @Result(property = "updateDate", column = "update_date")
-  })
-  List<TaskExecutionReport> findByStatus(@Param("status") StatusEnum status);
+  private SqlSessionFactory sqlSessionFactory;
 
-  @Select(
-      "SELECT * FROM task_execution_report WHERE execution_time_seconds IS NOT NULL ORDER BY execution_time_seconds DESC")
-  @Results({
-    @Result(property = "id", column = "task_execution_id"),
-    @Result(property = "taskId", column = "task_id"),
-    @Result(property = "startDateTime", column = "start_date_time"),
-    @Result(property = "endDateTime", column = "end_date_time"),
-    @Result(property = "executionTimeSeconds", column = "execution_time_seconds"),
-    @Result(property = "errorMessage", column = "error_message"),
-    @Result(property = "status", column = "status"),
-    @Result(property = "insertDate", column = "insert_date"),
-    @Result(property = "updateDate", column = "update_date")
-  })
-  List<TaskExecutionReport> findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc();
+  @Autowired
+  public TaskExecutionReportPersistenceMapper(SqlSessionFactory sqlSessionFactory) {
+    this.sqlSessionFactory = sqlSessionFactory;
+  }
 
-  @Select(
-      "SELECT * FROM task_execution_report WHERE start_date_time IS NOT NULL AND end_date_time IS NOT NULL AND execution_time_seconds IS NULL")
-  @Results({
-    @Result(property = "id", column = "task_execution_id"),
-    @Result(property = "taskId", column = "task_id"),
-    @Result(property = "startDateTime", column = "start_date_time"),
-    @Result(property = "endDateTime", column = "end_date_time"),
-    @Result(property = "executionTimeSeconds", column = "execution_time_seconds"),
-    @Result(property = "errorMessage", column = "error_message"),
-    @Result(property = "status", column = "status"),
-    @Result(property = "insertDate", column = "insert_date"),
-    @Result(property = "updateDate", column = "update_date")
-  })
-  List<TaskExecutionReport>
-      findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
+  public void insert(TaskExecutionReport taskExecutionReport) {
+    SqlSession session = sqlSessionFactory.openSession();
+    session.insert("insert", taskExecutionReport);
+    session.commit();
+    session.close();
+  }
+
+  public void update(TaskExecutionReport taskExecutionReport) {
+    SqlSession session = sqlSessionFactory.openSession();
+    session.insert("update", taskExecutionReport);
+    session.commit();
+    session.close();
+  }
+
+  public void delete(Integer id) {
+    SqlSession session = sqlSessionFactory.openSession();
+    session.insert("delete", id);
+    session.commit();
+    session.close();
+  }
+
+  public List<TaskExecutionReport> findAll() {
+    SqlSession session = sqlSessionFactory.openSession();
+    List<TaskExecutionReport> taskExecutionReportList = session.selectList("findAll");
+    session.commit();
+    session.close();
+    return taskExecutionReportList;
+  }
+
+  public Optional<TaskExecutionReport> findById(Integer id) {
+    SqlSession session = sqlSessionFactory.openSession();
+    TaskExecutionReport taskExecutionReport = session.selectOne("findById", id);
+    session.commit();
+    session.close();
+    if (taskExecutionReport == null) {
+      return Optional.empty();
+    }
+    return Optional.of(taskExecutionReport);
+  }
+
+  public List<TaskExecutionReport> findByStatus(StatusEnum status) {
+    SqlSession session = sqlSessionFactory.openSession();
+    List<TaskExecutionReport> taskExecutionReportList =
+        session.selectList("findByStatus", status.getValue());
+    session.commit();
+    session.close();
+    return taskExecutionReportList;
+  }
+
+  public List<TaskExecutionReport>
+      findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc() {
+    SqlSession session = sqlSessionFactory.openSession();
+    List<TaskExecutionReport> taskExecutionReportList =
+        session.selectList("findByExecutionTimeSecondsIsNotNullOrderByExecutionTimeSecondsDesc");
+    session.commit();
+    session.close();
+    return taskExecutionReportList;
+  }
+
+  public List<TaskExecutionReport>
+      findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull() {
+    SqlSession session = sqlSessionFactory.openSession();
+    List<TaskExecutionReport> taskExecutionReportList =
+        session.selectList(
+            "findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull");
+    session.commit();
+    session.close();
+    return taskExecutionReportList;
+  }
 }
