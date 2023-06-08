@@ -7,7 +7,6 @@ import com.service.taskreport.enums.StatusEnum;
 import com.service.taskreport.exception.TaskExecutionReportNotFoundException;
 import com.service.taskreport.exception.UndefinedStatusException;
 import com.service.taskreport.mapper.persistence.TaskExecutionReportPersistenceMapper;
-import com.service.taskreport.repository.TaskStepExecutionReportRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -23,8 +22,6 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   private final TaskExecutionReportPersistenceMapper taskExecutionReportPersistenceMapper =
       Mockito.mock(TaskExecutionReportPersistenceMapper.class);
-  private final TaskStepExecutionReportRepository taskStepExecutionReportRepository =
-      Mockito.mock(TaskStepExecutionReportRepository.class);
   private final TaskStepExecutionReportService taskStepExecutionReportService =
       Mockito.mock(TaskStepExecutionReportService.class);
   private final TaskExecutionReportService taskExecutionReportService =
@@ -176,8 +173,6 @@ class TaskExecutionReportServiceTest extends TestUtility {
 
   @Test
   void saveTest() throws UndefinedStatusException {
-    BDDMockito.given(taskStepExecutionReportRepository.save(Mockito.any()))
-        .willReturn(buildTaskStepExecutionReport());
     assertEquals(
         buildTaskExecutionReport(),
         taskExecutionReportService.saveRequest(
