@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.service.taskreport.mapper.persistence.TaskStepExecutionReportPersistenceMapper">
+    <resultMap id="TaskStepExecutionReportResultMap" type="TaskStepExecutionReport">
+        <id property="id" column="task_execution_id"/>
+        <id property="taskExecutionId" column="task_execution_id"/>
+        <id property="stepName" column="step_name"/>
+        <id property="status" column="status"/>
+        <id property="startDateTime" column="start_date_time"/>
+        <id property="endDateTime" column="end_date_time"/>
+        <id property="executionTimeSeconds" column="execution_time_seconds"/>
+        <id property="errorMessage" column="error_message"/>
+        <id property="insertDate" column="insert_date"/>
+        <id property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <select id="findAll" resultType="TaskStepExecutionReport" resultMap="TaskStepExecutionReportResultMap">
+        SELECT * FROM task_step_execution_report
+    </select>
+
+    <insert id="insert" parameterType="TaskStepExecutionReport" keyProperty="id" keyColumn="task_execution_id"
+            useGeneratedKeys="true">
+        INSERT INTO task_step_execution_report (task_execution_id, step_name, status, start_date_time, end_date_time,
+        execution_time_seconds, error_message) VALUES (#{taskExecutionId}, #{stepName}, #{status}, #{startDateTime},
+        #{endDateTime},
+        #{executionTimeSeconds}, #{errorMessage})
+    </insert>
+
+    <update id="update" parameterType="TaskStepExecutionReport">
+        UPDATE task_step_execution_report
+        SET task_execution_id = #{taskExecutionId}, step_name = #{stepName}, status = #{status}, start_date_time =
+        #{startDateTime}, end_date_time = #{endDateTime},execution_time_seconds = #{executionTimeSeconds}, error_message
+        = #{errorMessage}
+        WHERE task_execution_id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM task_step_execution_report WHERE task_execution_id = #{id}
+    </delete>
+
+    <select id="findById" parameterType="int" resultType="TaskStepExecutionReport"
+            resultMap="TaskStepExecutionReportResultMap">
+        SELECT * FROM task_step_execution_report WHERE task_execution_id = #{id}
+    </select>
+
+    <select id="findByTaskExecutionId" parameterType="int" resultType="TaskStepExecutionReport"
+            resultMap="TaskStepExecutionReportResultMap">
+        SELECT * FROM task_step_execution_report WHERE task_execution_id = #{taskExecutionId}
+    </select>
+
+    <select id="findByTaskExecutionIdSort" parameterType="map" resultType="TaskStepExecutionReport"
+            resultMap="TaskStepExecutionReportResultMap">
+        SELECT * FROM task_step_execution_report WHERE task_execution_id = #{params.taskExecutionId} ORDER BY
+        task_execution_id #{params.sort}
+    </select>
+
+    <select id="findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull"
+            resultType="TaskStepExecutionReport" resultMap="TaskStepExecutionReportResultMap">
+        SELECT * FROM task_step_execution_report WHERE start_date_time IS NOT NULL AND end_date_time IS NOT NULL AND
+        execution_time_seconds IS NULL
+    </select>
+</mapper>
