@@ -27,28 +27,29 @@ public class TaskStepExecutionReportPersistenceMapper {
 
   public void insert(TaskStepExecutionReport taskStepExecutionReport) {
     SqlSession session = sqlSessionFactory.openSession();
-    session.insert("insert", taskStepExecutionReport);
+    session.insert("insertTaskStepExecutionReport", taskStepExecutionReport);
     session.commit();
     session.close();
   }
 
   public void update(TaskExecutionReport taskExecutionReport) {
     SqlSession session = sqlSessionFactory.openSession();
-    session.insert("update", taskExecutionReport);
+    session.insert("updateTaskStepExecutionReport", taskExecutionReport);
     session.commit();
     session.close();
   }
 
   public void delete(Integer id) {
     SqlSession session = sqlSessionFactory.openSession();
-    session.insert("delete", id);
+    session.insert("deleteTaskStepExecutionReport", id);
     session.commit();
     session.close();
   }
 
   public List<TaskStepExecutionReport> findAll() {
     SqlSession session = sqlSessionFactory.openSession();
-    List<TaskStepExecutionReport> taskStepExecutionReportList = session.selectList("findAll");
+    List<TaskStepExecutionReport> taskStepExecutionReportList =
+        session.selectList("findAllTaskStepExecutionReport");
     session.commit();
     session.close();
     return taskStepExecutionReportList;
@@ -56,7 +57,8 @@ public class TaskStepExecutionReportPersistenceMapper {
 
   public Optional<TaskStepExecutionReport> findById(Integer id) {
     SqlSession session = sqlSessionFactory.openSession();
-    TaskStepExecutionReport taskStepExecutionReport = session.selectOne("findById", id);
+    TaskStepExecutionReport taskStepExecutionReport =
+        session.selectOne("findByIdTaskStepExecutionReport", id);
     session.commit();
     session.close();
     if (taskStepExecutionReport == null) {
@@ -68,7 +70,7 @@ public class TaskStepExecutionReportPersistenceMapper {
   public List<TaskStepExecutionReport> findByTaskExecutionId(Integer taskExecutionId) {
     SqlSession session = sqlSessionFactory.openSession();
     List<TaskStepExecutionReport> taskStepExecutionReportList =
-        session.selectList("findByTaskExecutionId", taskExecutionId);
+        session.selectList("findByTaskExecutionIdTaskStepExecutionReport", taskExecutionId);
     session.commit();
     session.close();
     return taskStepExecutionReportList;
@@ -80,7 +82,7 @@ public class TaskStepExecutionReportPersistenceMapper {
     params.put("sort", sort.toString());
     SqlSession session = sqlSessionFactory.openSession();
     List<TaskStepExecutionReport> taskStepExecutionReportList =
-        session.selectList("findByTaskExecutionIdSort", params);
+        session.selectList("findByTaskExecutionIdSortTaskStepExecutionReport", params);
     session.commit();
     session.close();
     return taskStepExecutionReportList;
@@ -91,7 +93,7 @@ public class TaskStepExecutionReportPersistenceMapper {
     SqlSession session = sqlSessionFactory.openSession();
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         session.selectList(
-            "findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull");
+            "findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNullTaskStepExecutionReport");
     session.commit();
     session.close();
     return taskStepExecutionReportList;
