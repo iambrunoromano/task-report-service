@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.service.taskreport.mapper.persistence.TaskStepExecutionReportPersistenceMapper">
     <resultMap id="TaskStepExecutionReportResultMap" type="TaskStepExecutionReport">
-        <id property="id" column="task_execution_id"/>
+        <id property="id" column="task_step_execution_id"/>
         <id property="taskExecutionId" column="task_execution_id"/>
         <id property="stepName" column="step_name"/>
         <id property="status" column="status"/>
