@@ -2,15 +2,15 @@ package com.service.taskreport.enums;
 
 public enum TaskStepExecutionReportColumnNameEnum {
   id("id"),
-  taskExecutionId("taskExecutionId"),
-  stepName("stepName"),
+  taskExecutionId("task_execution_id"),
+  stepName("step_name"),
   status("status"),
-  startDateTime("startDateTime"),
-  endDateTime("endDateTime"),
-  executionTimeSeconds("executionTimeSeconds"),
-  errorMessage("errorMessage"),
-  insertDate("insertDate"),
-  updateDate("updateDate");
+  startDateTime("start_date_time"),
+  endDateTime("end_date_time"),
+  executionTimeSeconds("execution_time_seconds"),
+  errorMessage("error_message"),
+  insertDate("insert_date"),
+  updateDate("update_date");
 
   private final String value;
 
