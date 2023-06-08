@@ -4,7 +4,8 @@ import com.service.taskreport.entity.TaskExecutionReport;
 import com.service.taskreport.entity.TaskStepExecutionReport;
 import com.service.taskreport.exception.TaskStepExecutionReportBadRequestException;
 import com.service.taskreport.exception.TaskStepExecutionReportNotFoundException;
-import com.service.taskreport.repository.TaskStepExecutionReportRepository;
+import com.service.taskreport.mapper.persistence.TaskExecutionReportPersistenceMapper;
+import com.service.taskreport.mapper.persistence.TaskStepExecutionReportPersistenceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,17 +20,17 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TaskStepExecutionReportService {
 
-  private final TaskStepExecutionReportRepository taskStepExecutionReportRepository;
+  private final TaskStepExecutionReportPersistenceMapper taskStepExecutionReportPersistenceMapper;
 
   @Autowired
   TaskStepExecutionReportService(
-      TaskStepExecutionReportRepository taskStepExecutionReportRepository) {
-    this.taskStepExecutionReportRepository = taskStepExecutionReportRepository;
+      TaskStepExecutionReportPersistenceMapper taskStepExecutionReportPersistenceMapper) {
+    this.taskStepExecutionReportPersistenceMapper = taskStepExecutionReportPersistenceMapper;
   }
 
   public List<TaskStepExecutionReport> getAll() {
     List<TaskStepExecutionReport> taskStepExecutionReportList =
-        taskStepExecutionReportRepository.findAll();
+        taskStepExecutionReportPersistenceMapper.findAll();
     log.info("Found [{}] taskStepExecutionReport", taskStepExecutionReportList.size());
     return taskStepExecutionReportList;
   }
@@ -37,7 +38,7 @@ public class TaskStepExecutionReportService {
   public TaskStepExecutionReport getById(Integer id)
       throws TaskStepExecutionReportNotFoundException {
     Optional<TaskStepExecutionReport> optionalTaskExecutionReport =
-        taskStepExecutionReportRepository.findById(id);
+        taskStepExecutionReportPersistenceMapper.findById(id);
     if (optionalTaskExecutionReport.isPresent()) {
       TaskStepExecutionReport taskStepExecutionReport = optionalTaskExecutionReport.get();
       log.info("Found one taskStepExecutionReport for id [{}]: [{}]", id, taskStepExecutionReport);
@@ -50,16 +51,15 @@ public class TaskStepExecutionReportService {
   public List<TaskStepExecutionReport> getByTaskExecutionId(Integer taskExecutionId)
       throws TaskStepExecutionReportNotFoundException {
     List<TaskStepExecutionReport> taskStepExecutionReportList =
-        taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionId);
+        taskStepExecutionReportPersistenceMapper.findByTaskExecutionId(taskExecutionId);
     return checkListNotEmpty(taskStepExecutionReportList, taskExecutionId);
   }
 
   public List<TaskStepExecutionReport> getSortedByTaskExecutionId(
       Integer taskExecutionId, Sort.Direction direction, String columnName)
       throws TaskStepExecutionReportNotFoundException {
-    Sort sort = Sort.by(direction, columnName);
     List<TaskStepExecutionReport> taskStepExecutionReportList =
-        taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionId, sort);
+        taskStepExecutionReportPersistenceMapper.findByTaskExecutionId(taskExecutionId, direction.toString(), columnName);
     return checkListNotEmpty(taskStepExecutionReportList, taskExecutionId);
   }
 
@@ -101,14 +101,14 @@ public class TaskStepExecutionReportService {
 
   public void deleteByTaskExecutionId(Integer taskExecutionId) {
     List<TaskStepExecutionReport> taskStepExecutionReportList =
-        taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionId);
+        taskStepExecutionReportPersistenceMapper.findByTaskExecutionId(taskExecutionId);
     log.info(
         "Found [{}] taskStepExecutionReports for taskExecutionId [{}]",
         taskStepExecutionReportList.size(),
         taskExecutionId);
     if (!taskStepExecutionReportList.isEmpty()) {
       for (TaskStepExecutionReport taskStepExecutionReport : taskStepExecutionReportList) {
-        taskStepExecutionReportRepository.delete(taskStepExecutionReport);
+        taskStepExecutionReportPersistenceMapper.delete(taskStepExecutionReport.getId());
       }
       log.info(
           "Deleted [{}] taskStepExecutionReports for taskExecutionId [{}]",
@@ -119,7 +119,7 @@ public class TaskStepExecutionReportService {
 
   public TaskStepExecutionReport save(TaskStepExecutionReport taskStepExecutionReport) {
     taskStepExecutionReport = computeSeconds(taskStepExecutionReport);
-    taskStepExecutionReport = taskStepExecutionReportRepository.save(taskStepExecutionReport);
+    taskStepExecutionReportPersistenceMapper.insert(taskStepExecutionReport);
     log.info(
         "Saved taskStepExecutionReport with taskExecutionId [{}] - id [{}]",
         taskStepExecutionReport.getTaskExecutionId(),
@@ -128,8 +128,8 @@ public class TaskStepExecutionReportService {
   }
 
   public void delete(Integer id) throws TaskStepExecutionReportNotFoundException {
-    TaskStepExecutionReport taskStepExecutionReport = getById(id);
-    taskStepExecutionReportRepository.delete(taskStepExecutionReport);
+    getById(id);
+    taskStepExecutionReportPersistenceMapper.delete(id);
     log.info("Deleted taskStepExecutionReport for id [{}]", id);
   }
 
@@ -141,7 +141,8 @@ public class TaskStepExecutionReportService {
     List<TaskStepExecutionReport> taskStepExecutionReportList = new ArrayList<>();
     for (TaskExecutionReport taskExecutionReport : taskExecutionReportList) {
       taskStepExecutionReportList.addAll(
-          taskStepExecutionReportRepository.findByTaskExecutionId(taskExecutionReport.getId()));
+          taskStepExecutionReportPersistenceMapper.findByTaskExecutionId(
+              taskExecutionReport.getId()));
     }
     log.info(
         "Returning list of [{}] taskStepExecutionReports related to [{}] taskExecutionReports",
@@ -171,7 +172,7 @@ public class TaskStepExecutionReportService {
 
   public List<TaskStepExecutionReport> getMissingExecutionTime() {
     List<TaskStepExecutionReport> taskStepExecutionReportList =
-        taskStepExecutionReportRepository
+        taskStepExecutionReportPersistenceMapper
             .findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNull();
     log.info(
         "Found [{}] taskStepExecutionReport with non-null startDateTime, non-null endDateTime, null executionTimeSeconds",
