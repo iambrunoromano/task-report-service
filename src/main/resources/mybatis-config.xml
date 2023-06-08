@@ -20,5 +20,6 @@
     </environments>
     <mappers>
         <mapper resource="TaskExecutionReportPersistenceMapper.xml"/>
+        <mapper resource="TaskStepExecutionReportPersistenceMapper.xml"/>
     </mappers>
 </configuration>
