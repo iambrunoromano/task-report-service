@@ -50,10 +50,9 @@
         SELECT * FROM task_step_execution_report WHERE task_execution_id = #{taskExecutionId}
     </select>
 
-    <select id="findByTaskExecutionIdSortTaskStepExecutionReport" parameterType="map" resultType="TaskStepExecutionReport"
+    <select id="findByTaskExecutionIdSortTaskStepExecutionReport" parameterType="java.util.Map" resultType="TaskStepExecutionReport"
             resultMap="TaskStepExecutionReportResultMap">
-        SELECT * FROM task_step_execution_report WHERE task_execution_id = #{params.taskExecutionId} ORDER BY
-        task_execution_id #{params.sort}
+        SELECT * FROM task_step_execution_report WHERE task_execution_id = #{taskExecutionId} ORDER BY ${columnName} ${direction}
     </select>
 
     <select id="findByStartDateTimeIsNotNullAndEndDateTimeIsNotNullAndExecutionTimeSecondsIsNullTaskStepExecutionReport"
