@@ -76,10 +76,12 @@ public class TaskStepExecutionReportPersistenceMapper {
     return taskStepExecutionReportList;
   }
 
-  public List<TaskStepExecutionReport> findByTaskExecutionId(Integer taskExecutionId, Sort sort) {
+  public List<TaskStepExecutionReport> findByTaskExecutionId(
+      Integer taskExecutionId, String direction, String columnName) {
     Map<String, Object> params = new HashMap<>();
     params.put("taskExecutionId", taskExecutionId);
-    params.put("sort", sort.toString());
+    params.put("columnName", columnName);
+    params.put("direction", direction);
     SqlSession session = sqlSessionFactory.openSession();
     List<TaskStepExecutionReport> taskStepExecutionReportList =
         session.selectList("findByTaskExecutionIdSortTaskStepExecutionReport", params);
